@@ -15,13 +15,15 @@
 
 # include "mlx_linux/mlx.h"
 
-typedef struct	s_data {
-	void	*image;
-	char	*addr;
+typedef struct	s_fract {
+	void	*fract_img;
+	char	*pixel_ptr;
 	int		bpp;
 	int		l_len;
 	int		endian;
-}	t_data;
+	void	*mlx;
+	void	*window;
+}	t_fract;
 
 int		main(void);
 void	blit_pixel(t_data *img, int x, int y, int color);

@@ -10,32 +10,44 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fractol.h"
-#include "mlx_linux/mlx.h"
+#include "../includes/fractol.h"
+#include "../includes/mlx_linux/mlx.h"
+#include "../includes/libft/libft.h"
 
 // METASKILLS: code completion vim default: CTRL+Y
 
-int		main(void) //NEXT: add support for arguments, to handle fract type
+int		main(int argc, char *argv[])
 {
-	void		*mlx;
-	void		*window;
-	t_data		img;
+	t_fract		fract;
 
-	mlx = mlx_init();
-	window = mlx_new_window(mlx, 1920, 1080, "Fract-ol");
-	img.image = mlx_new_image(mlx, 1920, 1080);
-	img.addr = mlx_get_data_addr(img.image, &img.bpp, &img.l_len, &img.endian);
-	blit_pixel(&img, x_pos, y_pos, color_hexval); // count proper values with another func
-	mlx_put_image_to_window(mlx, window, img.image, 0, 0); // 0, 0 begins from upper left corner of window
-	mlx_loop(mlx);
+	if (argc != 2)
+	{
+		ft_printf("Run with command:		./fractol <FRACTAL NAME>\n"); //replace these with a libft function and import one less lib
+		ft_printf("Available fractals:		mandelbrot, julia & burningship");
+		return (0);
+	}
+	initialize_tools(&fract);
+	generate_fractal(argv[1], &fract);
+	render(&fract);	
+	mlx_loop(fract.mlx);
 
 	return (0);
 }
 
-void	blit_pixel(t_data *img, int x, int y, int color)
+void	initialize_tools(t_fract *fract)
 {
-	char	*dst;
+	init_mlx(fract);
+	init_fract(fract);
+}
 
-	dst = img->addr + (y * img->l_len + x * (img->bpp / 8));
-	*(unsigned int*)dst = color;
+void	init_mlx(t_fract *fract)
+{
+	fract->mlx = mlx_init();
+	fract->window = mlx_new_window(fract->mlx, 1920, 1080, "Fract-ol");
+}
+
+void	init_fract(t_fract *fract)
+{
+	fract->fract_img = mlx_new_image(fract->mlx, 1920, 1080);
+	fract->pixel_ptr = mlx_get_data_addr(fract->fract_img, &fract->bpp, &fract->l_len, &fract->endian);
 }
