@@ -22,8 +22,8 @@ int		main(int argc, char *argv[])
 
 	if (argc != 2)
 	{
-		ft_printf("Run with command:		./fractol <FRACTAL NAME>\n"); //replace these with a libft function and import one less lib
-		ft_printf("Available fractals:		mandelbrot, julia & burningship");
+		ft_putendl("Run with argument:		./fractol <FRACTAL NAME>");
+		ft_putendl("Available arguments:		mandel, julia & ship");
 		return (0);
 	}
 	initialize_tools(&fract);
@@ -43,11 +43,11 @@ void	initialize_tools(t_fract *fract)
 void	init_mlx(t_fract *fract)
 {
 	fract->mlx = mlx_init();
-	fract->window = mlx_new_window(fract->mlx, 1920, 1080, "Fract-ol");
+	fract->window = mlx_new_window(fract->mlx, W_WIDTH, W_HEIGHT, "Fract-ol");
 }
 
-void	init_fract(t_fract *fract)
+void	init_fract(t_fract *fra)
 {
-	fract->fract_img = mlx_new_image(fract->mlx, 1920, 1080);
-	fract->pixel_ptr = mlx_get_data_addr(fract->fract_img, &fract->bpp, &fract->l_len, &fract->endian);
+	fra->img = mlx_new_image(fra->mlx, W_WIDTH, W_HEIGHT);
+	fra->px_ptr = mlx_get_data_addr(fra->img, &fra->bpp, &fra->l_len, &fra->e);
 }
