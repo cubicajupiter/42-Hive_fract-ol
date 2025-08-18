@@ -1,56 +1,78 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fractal_generator.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jvalkama <jvalkama@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/18 10:02:21 by jvalkama          #+#    #+#             */
+/*   Updated: 2025/08/18 10:59:48 by jvalkama         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <math.h>
+#include "../includes/fractol.h"
 
-void	generate_fractal(char *type_arg, t_fract *fract)
+void	generate_fractal(int type, t_fract *fr)
 {
-	fract->x = 0;
-	fract->y = 0;
-	fract->x_scale = 4 / W_WIDTH;
-	fract->y_scale = 4 / W_HEIGHT * -1;
-	if (ft_strncmp(type_arg, "mandel", 7))
-		gen_mandel(fract);
-	else if (ft_strncmp(type_arg, "julia", 6))
-		gen_julia(fract);
-	else if (ft_strncmp(type_arg, "ship", 5))
-		gen_ship(fract);
-	else
-		write(1, "Choose type: mandel, julia, ship\n", 33);
-	mlx_put_image_to_window(fract->mlx, fract->window, fract->fract_img, 0, 0);
-}
-
-void	gen_mandel(t_fract *fract)
-{
-	int		i;
-	
-	while (fract->y < W_HEIGHT)
+	fr->x = 0;
+	fr->y = 0;
+	fr->x_scale = 4 / W_WIDTH;
+	fr->y_scale = 4 / W_HEIGHT * -1;
+	while (fr->y < W_HEIGHT)
 	{
-		fract->c_i = fract->y * fract->y_scale + 2.;
-		while (fract->x < W_WIDTH)
+		while (fr->x < W_WIDTH)
 		{
-			fract->z_r = 0.0;
-			fract->z_i = 0.0;
-			fract->c_r = fract->x * fract->x_scale - 2.;
-			i = 0;
-			while (++i < 25)
-			{
-				fract->z_r = ;
-				fract->z_i = ;
-				if (a + b) //magnitude calculation for z
-					break;
-			}
-			blit_px_to_img(fract, i);
-			fract->x++;
+			if (type == MANDEL)
+				gen_mandel_px(fr);
+			else if (type == JULIA)
+				gen_julia_px(fr);
+			else if (type == SHIP)
+				gen_ship_px(fr);
+			blit_px_to_img(fr);
+			fr->x++;
 		}
-		fract->x = 0;
-		fract->y++;
+		fr->x = 0;
+		fr->y++;
 	}
 }
 
-void	gen_julia(t_fract *fract)
+void	gen_mandel_px(t_fract *fr)
 {
+	int			i;
+	double		temp_zR;
 	
+	i = 0;
+	fr->zR = 0.0;
+	fr->zi = 0.0;
+	fr->ci = fr->y * fr->y_scale + 2.;
+	fr->cR = fr->x * fr->x_scale - 2.;
+	while (i < MAX_ITERS)
+	{
+		temp_zR = fr->zR;
+		fr->zR = (fr->zR * fr->zR) + (-1 * fr->zi * fr->zi);
+		fr->zi = (temp_zR * fr->zi) * 2;
+		fr->zR += fr->cR;
+		fr->zi += fr->ci;
+		if ((fr->zR * fr->zR) + (fr->zi * fr->zi) > 4)
+		{
+			fr->i = i;
+			break;
+		}
+		i++;
+	}
 }
 
-void	gen_ship(t_fract *fract)
+void	gen_julia_px(t_fract *fr)
+{
+	fr->zR = ;
+	fr->zi = ;
+	fr->cR = ;
+	fr->ci = ;
+	float *famous = [0.763, 0.086];
+}
+
+void	gen_ship_px(t_fract *fr)
 {
 	
 }

@@ -13,29 +13,34 @@
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
-# include "mlx_linux/mlx.h"
+# include "../mlx_linux/mlx.h"
 
+# define MANDEL			1
+# define JULIA			2
+# define SHIP			3
+# define NONE			0
+# define GALAX			1
+# define CLOUD			2
+# define VORTEX			3
+# define ELECTRO		4
 # define W_WIDTH		1000
 # define W_HEIGHT		1000
-# define COLOR_ORBIT	0 // hex value for a stable orbit.
-# define COLOR_1S		0 // nS are hex values for how many steps until divergence.
-# define COLOR_2S		0
-# define COLOR_3S		0
-# define COLOR_4S		0
-# define COLOR_5S		0
-# define COLOR_6S		0
+# define MAX_ITERS		25
+# define ERROR			1
 
 typedef struct	s_fract {
 	void		*img;
 	char		*px_ptr;
 	int			x;
 	int			y;
-	double		z_r;
-	double		z_i;
-	double		c_r;
-	double		c_i;
+	double		zR;
+	double		zi;
+	double		cR;
+	double		ci;
 	double		x_scale;
 	double		y_scale;
+	int			colors[MAX_ITERS];
+	int			i;
 	int			bpp;
 	int			l_len;
 	int			e;
@@ -43,7 +48,20 @@ typedef struct	s_fract {
 	void		*window;
 }	t_fract;
 
-int		main(void);
-void	blit_pixel(t_data *img, int x, int y, int color);
+int		main(int argc, char *argv[]);
+void	initialize_tools(t_fract *fract);
+void	init_mlx(t_fract *fract);
+void	init_fract(t_fract *fra);
+void	render(t_fract *fract);
+void	blit_px_to_img(t_fract *img, int x, int y, int color);
+void	generate_fractal(int type, t_fract *fract);
+void	gen_mandel_px(t_fract *fract);
+void	gen_julia_px(t_fract *fract);
+void	gen_ship_px(t_fract *fract);
+
+//libft
+int		ft_strncmp();
+int		ft_putends();
+
 
 #endif

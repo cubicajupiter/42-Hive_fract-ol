@@ -1,0 +1,34 @@
+##Fractal Generation:
+
+###generate_fractal:
+Initializes the pixel coordinates x and y for the fractal. Sets the fractal's x_scale modifier as 4 divided by window width and sets its y_scale modifier as the negative of 4 divided by window height.
+The divider 4 is based on that the mandelbrot set Cartesian Plane has an extent of 4 total on both sides of the origin counted together: a range from -2 to 2.
+Y_scale is negative and x_scale is positive, because the cartesian plane y-axis decreases downward, while a window's pixel y-axis increases downward. 2.0 is added to the y_scale to "offset" the zero point into the middle of 4, keeping all pixel values under the halfway point negative, flipping pixel values above the halfway point into positives. Vice versa for x_scale.
+
+###gen_mandel:
+Z = Z^2 + C 
+has three loops nested inside one another. Outermost loop for looping y pixels, the next loop for looping x pixels, and the innermost for a number of iterations to plot the orbit for the set of coordinates x and y. The innermost loop contains the  Z = Z^2 + C  mandelbrot equation logic.
+
+###gen_julia:
+Like the mandelbrot, but C is a fixed value for all pixels, and the initial value of Z is set to the coordinates of the pixel being calculated. The fixed C value constant is set before iteration begins.
+The key difference with mandelbrot is that mandel C assumes the value of the pixel, while julia C remains constant.
+
+###gen_ship:
+The burning ship fractal is slightly different from mandelbrot and julia, but utilizes the same variables Z and C since it uses complex numbers.
+####Equation: 
+Z = (abs(Z_i) + abs(Z_R))^2 + C
+
+####Implementation:
+Real part (Z_R): x_n = x^2 - y^2 - C_x
+Imag part (Z_i): y_n = (abs(x * y) * 2) + C_y
+
+##Macros:
+
+W_WIDTH: program window width in pixels
+W_HEIGHT: program window height in pixels
+MAX_ITERS: number of maximum iterations for plotting the orbit of one value of C
+COLOR_ORBIT: hex value for a stable orbit (in MAX_ITERS number of iterations).
+COLOR_1S: hex values for how many steps until divergence.
+
+
+
