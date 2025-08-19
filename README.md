@@ -1,6 +1,7 @@
 ##Fractal Generation:
 
 ###generate_fractal:
+The fractal generation function will loop W_WIDTH x W_HEIGHT times. Passing a pointer to a double that is initialized once is significantly more performant than declaring and initializing a double within the function for each of the one million iterations. That is why temp_zR is initialized in generate_fractal() and passed as a ptr to each gen_fractal_px() function. The same with the index which is passed as the macro constant INDEX 0.
 Initializes the pixel coordinates x and y for the fractal. Sets the fractal's x_scale modifier as 4 divided by window width and sets its y_scale modifier as the negative of 4 divided by window height.
 The divider 4 is based on that the mandelbrot set Cartesian Plane has an extent of 4 total on both sides of the origin counted together: a range from -2 to 2.
 Y_scale is negative and x_scale is positive, because the cartesian plane y-axis decreases downward, while a window's pixel y-axis increases downward. 2.0 is added to the y_scale to "offset" the zero point into the middle of 4, keeping all pixel values under the halfway point negative, flipping pixel values above the halfway point into positives. Vice versa for x_scale.

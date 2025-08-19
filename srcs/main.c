@@ -11,10 +11,6 @@
 /* ************************************************************************** */
 
 #include "../includes/fractol.h"
-#include "../includes/mlx_linux/mlx.h"
-#include "../includes/libft/libft.h"
-
-// METASKILLS: code completion vim default: CTRL+Y
 
 int		main(int argc, char *argv[])
 {
@@ -22,16 +18,16 @@ int		main(int argc, char *argv[])
 
 	if (argc < 2 || argc > 3)
 	{
-		ft_putendl("Run with argument:		./fractol <FRACTAL NAME> <extra argument>\n");
-		ft_putendl("Fractal name arguments:		'mandel', 'julia', 'ship'");
-		ft_putendl("Extra parameter argument for julia (a decimal value):	<[-][0, 1, 2].[max 5 decimals]>");
-		ft_putendl("(Wrongful extra argument defaults to a Julia at 0, 0)");
+		ft_putendl_fd("Run with argument:		./fractol <FRACTAL NAME> <extra argument>", 1);
+		ft_putendl_fd("Fractal name arguments:		'mandel', 'julia', 'ship'\n", 1);
+		ft_putendl_fd("Julia takes up to two extra parameter arguments:	<[-][0, 1, 2][.][any number of decimals]>", 1);
+		ft_putendl_fd("(Bad parameters default to a Julia set at 0, 0)", 1);
 		return (ERROR);
 	}
-	initialize_tools(&fract); // does this initialize everything with every cycle of the mlx loop????????
-	if (assign_fract_type(argv, &fract));
+	initialize_tools(&fract);
+	if (assign_fract_type(argc, argv, &fract))
 		return (ERROR);
-	render(&fract);	
+	render(&fract);
 	mlx_loop(fract.mlx);
 	return (0);
 }
@@ -62,12 +58,12 @@ void	init_colors(t_fract *fract)
 	int		gradient_offset;
 
 	i = 0;
-	color = 0x0D0D3B; //darker shade of midnight blue, nearly black. First shade (background).
-	gradient_offset = 0; //need a way to iterate through hexes for a gradient
+	color = 0x0D0D3B;
+	gradient_offset = 0;
 	while (i < MAX_ITERS)
 	{
 		fract->colors[i] = color + gradient_offset;
-		gradient_offset += ; //could even iterate the gradient offset for added effect...
+		gradient_offset += 0; //needs a good offset for gradient. Niklas: red loops up and down, green increase to full, blue increase to halfway.
 		i++;
 	}
 }

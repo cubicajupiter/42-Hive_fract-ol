@@ -10,69 +10,113 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <math.h>
 #include "../includes/fractol.h"
 
-void	generate_fractal(int type, t_fract *fr)
+int		gen_fract_type(int argc, char *argv[], t_fract *fract)
 {
-	fr->x = 0;
-	fr->y = 0;
-	fr->x_scale = 4 / W_WIDTH;
-	fr->y_scale = 4 / W_HEIGHT * -1;
+	double		*save_zR;
+
+	*save_zR = 0.0;
+	init_members(fract);
+	if (ft_strncmp(argv[1], "mandel", 7))
+		gen_mandel(fract, 0, save_zR);
+	else if (ft_strncmp(argv[1], "julia", 6))
+	{
+		init_julia(fract, argc - 2, argv);
+		gen_julia(fract, 0, save_zR);
+	}
+	else if (ft_strncmp(argv[1], "ship", 5))
+		gen_ship(fract, 0, save_zR);
+	else
+	{
+		ft_putendl_fd("Choose type: mandel, julia, ship", 1);
+		return (ERROR);
+	}
+	return (0);
+}
+
+
+void	gen_mandel(t_fract *fr, int i, double *save_zR)
+{
 	while (fr->y < W_HEIGHT)
 	{
+		fr->x = 0;
 		while (fr->x < W_WIDTH)
 		{
-			if (type == MANDEL)
-				gen_mandel_px(fr);
-			else if (type == JULIA)
-				gen_julia_px(fr);
-			else if (type == SHIP)
-				gen_ship_px(fr);
-			blit_px_to_img(fr);
+			fr->zR = 0.0;
+			fr->zi = 0.0;
+			fr->cR = fr->x * fr->x_scale - 2.;
+			fr->ci = fr->y * fr->y_scale + 2.;
+			while (i < MAX_ITERS)
+			{
+				*save_zR = fr->zR;
+				fr->zR = (fr->zR * fr->zR) + (-1 * fr->zi * fr->zi);
+				fr->zi = (*save_zR * fr->zi) * 2;
+				fr->zR += fr->cR;
+				fr->zi += fr->ci;
+				if ((fr->zR * fr->zR) + (fr->zi * fr->zi) > 4)
+					break ;
+				i++;
+			}
+			blit_px_to_img(fr, i);
+			i = 0;
 			fr->x++;
 		}
-		fr->x = 0;
-		fr->y++;
 	}
 }
 
-void	gen_mandel_px(t_fract *fr)
+void	gen_julia(t_fract *fr, int i, double *save_zR)
 {
-	int			i;
-	double		temp_zR;
-	
-	i = 0;
-	fr->zR = 0.0;
-	fr->zi = 0.0;
-	fr->ci = fr->y * fr->y_scale + 2.;
-	fr->cR = fr->x * fr->x_scale - 2.;
-	while (i < MAX_ITERS)
+	while (fr->y < W_HEIGHT)
 	{
-		temp_zR = fr->zR;
-		fr->zR = (fr->zR * fr->zR) + (-1 * fr->zi * fr->zi);
-		fr->zi = (temp_zR * fr->zi) * 2;
-		fr->zR += fr->cR;
-		fr->zi += fr->ci;
-		if ((fr->zR * fr->zR) + (fr->zi * fr->zi) > 4)
+		fr->x = 0;
+		while (fr->x < W_WIDTH)
 		{
-			fr->i = i;
-			break;
+			fr->zR = fr->x * fr->x_scale - 2.;
+			fr->zi = fr->y * fr->y_scale + 2.;
+			while (i < MAX_ITERS)
+			{
+				*save_zR = fr->zR;
+				fr->zR = (fr->zR * fr->zR) + (-1 * fr->zi * fr->zi);
+				fr->zi = (*save_zR * fr->zi) * 2;
+				fr->zR += fr->cR;
+				fr->zi += fr->ci;
+				if ((fr->zR * fr->zR) + (fr->zi * fr->zi) > 4)
+					break ;
+				i++;
+			}
+			blit_px_to_img(fr, i);
+			i = 0;
+			fr->x++;
 		}
-		i++;
 	}
 }
 
-void	gen_julia_px(t_fract *fr)
+void	gen_ship(t_fract *fr, int i, double *save_zR)
 {
-	fr->zR = ;
-	fr->zi = ;
-	fr->cR = ;
-	fr->ci = ;
-	float *famous = [0.763, 0.086];
-}
-
-void	gen_ship_px(t_fract *fr)
-{
-	
+	while (fr->y < W_HEIGHT)
+	{
+		fr->x = 0;
+		while (fr->x < W_WIDTH)
+		{
+			fr->zR = 0.0;
+			fr->zi = 0.0;
+			fr->cR = fr->x * fr->x_scale - 2.;
+			fr->ci = fr->y * fr->y_scale + 2.;
+			while (i < MAX_ITERS)
+			{
+				*save_zR = fr->zR;
+				fr->zR = (fr->zR * fr->zR) - (fr->zi * fr->zi) - fr->cR;
+				fr->zi = (*save_zR * fr->zi);
+				fr->zi = fr->zi * (fr->zi > 0) - (fr->zi < 0);
+				fr->zi = 2 * fr->zi + fr->ci;
+				if ((fr->zR * fr->zR + (fr->zi * fr->zi) > 4))
+					break ;
+				i++;
+			}
+			blit_px_to_img(fr, i);
+			i = 0;
+			fr->x++;
+		}
+	}
 }

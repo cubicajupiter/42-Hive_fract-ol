@@ -12,51 +12,59 @@
 
 #include "../includes/fractol.h"
 
-int		assign_fract_type(char *argv[], t_fract *fract)
+void		init_members(t_fract *fract)
 {
-	float	parameter_spec;
-
-	if (ft_strncmp(argv[1], "mandel", 7))
-		generate_fractal(MANDEL, &fract, NONE);
-	else if (ft_strncmp(argv[1], "julia", 6))
-	{
-		parameter_spec = atof(argv[2]); //need two floats (two extra args) btw
-		generate_fractal(JULIA, &fract, parameter_spec);
-	}
-	else if (ft_strncmp(argv[1], "ship", 5))
-		generate_fractal(SHIP, &fract, NONE);
-	else
-	{
-		ft_putendl(1, "Choose type: mandel, julia, ship\n", 33);
-		return (ERROR);
-	}
-	return (0);
+	fract->x = 0;
+	fract->y = 0;
+	fract->x_scale = 4.0 / W_WIDTH;
+	fract->y_scale = 4.0 / W_HEIGHT * -1;
 }
 
-float	atof(char *arg)
+void		init_julia(t_fract *fract, int argc, char **argv)
 {
+	float	params[2];
+
+	params[0] = 0.0;
+	params[1] = 0.0;
+	ft_atof(argc, argv, params);
+	fract->cR = params[0];
+	fract->ci = params[1];
+}
+
+void		ft_atof(int argc, char **argv, float *parameters)
+{
+	char	**arg_ptr;
 	float	result;
 	int		sign;
-	int		i;
 
-	i = 0;
 	sign = 1;
 	result = 0;
-	if (arg[i] == '-')
+	arg_ptr = argv + 2;
+	while (argc-- > 0)
 	{
-		sign *= -1;
-		i++;
-	}	
-	if (arg[i] >= '0' && arg[i] <= '2')
-	{
-		result += arg[i] - '0';
-		i++;
+		if (**arg_ptr == '-')
+		{
+			sign *= -1;
+			(*arg_ptr)++;
+		}	
+		if (**arg_ptr >= '0' && **arg_ptr <= '2')
+		{
+			result += **arg_ptr - '0';
+			(*arg_ptr)++;
+		}
+		if (**arg_ptr == '.')
+			get_decimal(*arg_ptr + 1, &result, 0, 10);
+		*parameters = result;
+		parameters++;
+		arg_ptr++;
 	}
-	if (arg[i] != '.')
-		return (0)
-	while (arg[i])
+}
+
+void	get_decimal(char *string, float *result, int i, int divisor)
+{
+	if (i < 5)
 	{
-		result += 0.1 * arg[i] - '0';
+		*result += (string[i] - '0') / (float) divisor;
+		get_decimal(string, result, i + 1, divisor * 10);
 	}
-	return (0);
 }

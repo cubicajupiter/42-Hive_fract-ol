@@ -17,12 +17,10 @@ void	render(t_fract *fract)
 }
 
 //match iteration count with color: 25 is inside fractal, 0 is background, 1-24 means it diverged. The smaller the i, the faster it diverged.
-void	blit_px_to_img(t_fract *fract) 
+void	blit_px_to_img(t_fract *fract, int i) 
 {
 	char	*dst;
-	int		color;
 
-	color = fract->colors[fract->i];
 	dst = fract->pixel_ptr + (fract->y * fract->l_len + fract->x * (fract->bpp / 8));
-	*(unsigned int*)dst = color;
+	*(unsigned int*) dst = fract->colors[i];
 }

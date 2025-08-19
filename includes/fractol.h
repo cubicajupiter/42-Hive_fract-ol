@@ -13,20 +13,14 @@
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
-# include "../mlx_linux/mlx.h"
+# include "mlx_linux/mlx.h"
+# include "libft/libft.h"
 
-# define MANDEL			1
-# define JULIA			2
-# define SHIP			3
-# define NONE			0
-# define GALAX			1
-# define CLOUD			2
-# define VORTEX			3
-# define ELECTRO		4
 # define W_WIDTH		1000
 # define W_HEIGHT		1000
-# define MAX_ITERS		25
+# define MAX_ITERS		50
 # define ERROR			1
+# define INDEX			0
 
 typedef struct	s_fract {
 	void		*img;
@@ -48,20 +42,32 @@ typedef struct	s_fract {
 	void		*window;
 }	t_fract;
 
+//main.c
 int		main(int argc, char *argv[]);
 void	initialize_tools(t_fract *fract);
 void	init_mlx(t_fract *fract);
 void	init_fract(t_fract *fra);
+void	init_colors(t_fract *fract);
+
+//renderer.c
 void	render(t_fract *fract);
-void	blit_px_to_img(t_fract *img, int x, int y, int color);
-void	generate_fractal(int type, t_fract *fract);
-void	gen_mandel_px(t_fract *fract);
-void	gen_julia_px(t_fract *fract);
-void	gen_ship_px(t_fract *fract);
+void	blit_px_to_img(t_fract *fract, int i);
+
+//fractal_generator.c
+int		gen_fract_type(int argc, char *argv[], t_fract *fract);
+void	gen_mandel(t_fract *fr, int i, double *save_zR);
+void	gen_julia(t_fract *fr, int i, double *save_zR);
+void	gen_ship(t_fract *fr, int i, double *save_zR);
+
+//utils.c
+void	init_members(t_fract *fract);
+void	init_julia(t_fract *fract, int argc, char **argv);
+void	ft_atof(int argc, char **argv, float *parameters);
+void	get_decimal(char *string, float *result, int i, int divisor);
 
 //libft
-int		ft_strncmp();
-int		ft_putends();
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+void	ft_putendl_fd(char *s, int fd);
 
 
 #endif
