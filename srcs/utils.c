@@ -68,3 +68,5 @@ void	get_decimal(char *string, float *result, int i, int divisor)
 		get_decimal(string, result, i + 1, divisor * 10);
 	}
 }
+
+

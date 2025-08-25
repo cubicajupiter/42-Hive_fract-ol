@@ -15,6 +15,7 @@
 
 # include "mlx_linux/mlx.h"
 # include "libft/libft.h"
+# include <X11/X.h>
 
 # define W_WIDTH		1000
 # define W_HEIGHT		1000

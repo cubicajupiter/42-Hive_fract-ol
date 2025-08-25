@@ -25,10 +25,18 @@ int		main(int argc, char *argv[])
 		return (ERROR);
 	}
 	initialize_tools(&fract);
-	if (assign_fract_type(argc, argv, &fract))
+	if (gen_fract_type(argc, argv, &fract))
 		return (ERROR);
 	render(&fract);
-	mlx_loop(fract.mlx);
+
+	mlx_loop_hook(fract.mlx_ptr, &handle_no_event, &fract);
+	mlx_hook(fract.win_ptr, 17, 0, &close_window, &fract);
+	mlx_hook(fract.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &fract);
+	mlx_hook(fract.win_ptr, ButtonPress, ButtonPressMask, &handle_mousescroll, &fract);
+
+	mlx_loop(fract.mlx_ptr);
+	mlx_destroy_display(fract.mlx_ptr);
+	free(fract.mlx_ptr);
 	return (0);
 }
 
@@ -39,17 +47,26 @@ void	initialize_tools(t_fract *fract)
 	init_colors(fract);
 }
 
-void	init_mlx(t_fract *fract)
+int		init_mlx(t_fract *fract)
 {
-	fract->mlx = mlx_init();
-	fract->window = mlx_new_window(fract->mlx, W_WIDTH, W_HEIGHT, "Fract-ol");
+	fract->mlx_ptr = mlx_init(); //returns a void pointer. BUilds a "generic" - with address, without type.
+	if (!fract->mlx_ptr)
+		return (MLX_ERROR);
+	fract->win_ptr = mlx_new_window(fract->mlx_ptr), W_WIDTH, W_HEIGHT, "Fract-ol");
+	if (!fract->win_ptr)
+		return (MLX_ERROR);
+	return (0);
 }
 
 void	init_fract(t_fract *fra)
 {
-	fra->img = mlx_new_image(fra->mlx, W_WIDTH, W_HEIGHT);
+	fra->img = mlx_new_image(fra->mlx_ptr, W_WIDTH, W_HEIGHT);
+	if (!fra->img)
+		return (ERROR);
 	fra->px_ptr = mlx_get_data_addr(fra->img, &fra->bpp, &fra->l_len, &fra->e);
-}
+	if (!fra->px_ptr)
+		return (ERROR);
+	return (0);
 
 void	init_colors(t_fract *fract)
 {
@@ -58,7 +75,7 @@ void	init_colors(t_fract *fract)
 	int		gradient_offset;
 
 	i = 0;
-	color = 0x0D0D3B;
+	color = 0xTTRRGGBB;
 	gradient_offset = 0;
 	while (i < MAX_ITERS)
 	{
