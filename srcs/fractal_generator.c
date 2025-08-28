@@ -10,23 +10,24 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/fractol.h"
+#include "fractol.h"
 
 int		gen_fract_type(int argc, char *argv[], t_fract *fract)
 {
 	double		*save_zR;
+	int			i;
 
+	i = 0;
 	*save_zR = 0.0;
-	init_members(fract);
 	if (ft_strncmp(argv[1], "mandel", 7))
-		gen_mandel(fract, 0, save_zR);
+		gen_mandel(fract, i, save_zR);
 	else if (ft_strncmp(argv[1], "julia", 6))
 	{
 		init_julia(fract, argc - 2, argv);
-		gen_julia(fract, 0, save_zR);
+		gen_julia(fract, i, save_zR);
 	}
 	else if (ft_strncmp(argv[1], "ship", 5))
-		gen_ship(fract, 0, save_zR);
+		gen_ship(fract, i, save_zR);
 	else
 	{
 		ft_putendl_fd("Choose type: mandel, julia, ship", 1);
@@ -41,13 +42,13 @@ void	gen_mandel(t_fract *fr, int i, double *save_zR)
 	while (fr->y < W_HEIGHT)
 	{
 		fr->x = 0;
+		fr->ci = fr->y * fr->y_scale + fr->c_offset;
 		while (fr->x < W_WIDTH)
 		{
 			fr->zR = 0.0;
 			fr->zi = 0.0;
-			fr->cR = fr->x * fr->x_scale - 2.; //here 2 is OFFSET for zoom purposes
-			fr->ci = fr->y * fr->y_scale + 2.;
-			while (i < MAX_ITERS)
+			fr->cR = fr->x * fr->x_scale - fr->c_offset;
+			while (i < MAX_ITRS_PER_RND)
 			{
 				*save_zR = fr->zR;
 				fr->zR = (fr->zR * fr->zR) + (-1 * fr->zi * fr->zi);
@@ -58,7 +59,7 @@ void	gen_mandel(t_fract *fr, int i, double *save_zR)
 					break ;
 				i++;
 			}
-			blit_px_to_img(fr, i);
+			blit_px_to_img(fr, i); //prefer to replace with direct mlx call if possible in 25 lines
 			i = 0;
 			fr->x++;
 		}
@@ -70,10 +71,10 @@ void	gen_julia(t_fract *fr, int i, double *save_zR)
 	while (fr->y < W_HEIGHT)
 	{
 		fr->x = 0;
+		fr->zi = fr->y * fr->y_scale + fr->c_offset;
 		while (fr->x < W_WIDTH)
 		{
-			fr->zR = fr->x * fr->x_scale - 2.;
-			fr->zi = fr->y * fr->y_scale + 2.;
+			fr->zR = fr->x * fr->x_scale - fr->c_offset;
 			while (i < MAX_ITERS)
 			{
 				*save_zR = fr->zR;
@@ -101,8 +102,8 @@ void	gen_ship(t_fract *fr, int i, double *save_zR)
 		{
 			fr->zR = 0.0;
 			fr->zi = 0.0;
-			fr->cR = fr->x * fr->x_scale - 2.;
-			fr->ci = fr->y * fr->y_scale + 2.;
+			fr->cR = fr->x * fr->x_scale - fr->c_offest;
+			fr->ci = fr->y * fr->y_scale + fr->c_offset;
 			while (i < MAX_ITERS)
 			{
 				*save_zR = fr->zR;

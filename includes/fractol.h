@@ -17,6 +17,7 @@
 # include "libft/libft.h"
 # include <X11/X.h>
 
+# define ZOOM			1.3
 # define W_WIDTH		1000
 # define W_HEIGHT		1000
 # define MAX_ITERS		50
@@ -38,6 +39,8 @@ typedef struct	s_fract {
 	double		ci;
 	double		x_scale;
 	double		y_scale;
+	double		magnitude;
+	double		offset;
 	int			colors[MAX_ITERS];
 	int			i;
 	int			bpp;
@@ -49,10 +52,7 @@ typedef struct	s_fract {
 
 //main.c
 int		main(int argc, char *argv[]);
-void	initialize_tools(t_fract *fract);
-void	init_mlx(t_fract *fract);
-void	init_fract(t_fract *fra);
-void	init_colors(t_fract *fract);
+void	initialize(t_fract *fract);
 
 //renderer.c
 void	render(t_fract *fract);
@@ -64,15 +64,22 @@ void	gen_mandel(t_fract *fr, int i, double *save_zR);
 void	gen_julia(t_fract *fr, int i, double *save_zR);
 void	gen_ship(t_fract *fr, int i, double *save_zR);
 
+//event_input.c
+int		close_window();
+int		handle_keypress();
+int		mouse_scroll();
+
 //utils.c
-void	init_members(t_fract *fract);
-void	init_julia(t_fract *fract, int argc, char **argv);
 void	ft_atof(int argc, char **argv, float *parameters);
 void	get_decimal(char *string, float *result, int i, int divisor);
+void	zoom_in(t_fract *fract, int x, int y);
+void	zoom_out(t_fract *fract, int x, int y);
 
-//libft
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
-void	ft_putendl_fd(char *s, int fd);
-
+//inits.c
+void	init_mlx(t_fract *fract);
+void	init_fract(t_fract *fra);
+void	init_planar_values(t_fract *fract);
+void	init_colors(t_fract *fract);
+void	init_julia(t_fract *fract, int argc, char **argv);
 
 #endif

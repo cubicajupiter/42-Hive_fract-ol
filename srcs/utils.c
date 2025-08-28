@@ -10,26 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/fractol.h"
-
-void		init_members(t_fract *fract)
-{
-	fract->x = 0;
-	fract->y = 0;
-	fract->x_scale = 4.0 / W_WIDTH; //here 4 is SCALE for zoom purposes
-	fract->y_scale = 4.0 / W_HEIGHT * -1;
-}
-
-void		init_julia(t_fract *fract, int argc, char **argv)
-{
-	float	params[2];
-
-	params[0] = 0.0;
-	params[1] = 0.0;
-	ft_atof(argc, argv, params);
-	fract->cR = params[0];
-	fract->ci = params[1];
-}
+#include "fractol.h"
 
 void		ft_atof(int argc, char **argv, float *parameters)
 {
@@ -69,4 +50,17 @@ void	get_decimal(char *string, float *result, int i, int divisor)
 	}
 }
 
+void	zoom_in(t_fract *fract, int x, int y)
+{
+	fract->magnitude = fract->magnitude / ZOOM;
+	fract->c_offset = fract->magnitude / 2.; //AND MOUSE POSITION?
+}
 
+void	zoom_out(t_fract *fract, int x, int y)
+{
+	if (fract->magnitude < 4)
+	{
+		fract->magnitude = fract->magnitude * ZOOM;
+		fract->c_offset = fract->magnitude / 2.; //AND MOUSE POSITION?
+	}
+}
