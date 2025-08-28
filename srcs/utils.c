@@ -16,7 +16,7 @@ void		init_members(t_fract *fract)
 {
 	fract->x = 0;
 	fract->y = 0;
-	fract->x_scale = 4.0 / W_WIDTH;
+	fract->x_scale = 4.0 / W_WIDTH; //here 4 is SCALE for zoom purposes
 	fract->y_scale = 4.0 / W_HEIGHT * -1;
 }
 

@@ -22,6 +22,10 @@
 # define MAX_ITERS		50
 # define ERROR			1
 # define INDEX			0
+# define SCROLL_UP		4
+# define SCROLL_DWN		5
+# define LEFT_CLICK		1
+# define RIGHT_CLICK	3
 
 typedef struct	s_fract {
 	void		*img;

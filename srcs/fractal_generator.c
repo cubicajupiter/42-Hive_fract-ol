@@ -45,7 +45,7 @@ void	gen_mandel(t_fract *fr, int i, double *save_zR)
 		{
 			fr->zR = 0.0;
 			fr->zi = 0.0;
-			fr->cR = fr->x * fr->x_scale - 2.;
+			fr->cR = fr->x * fr->x_scale - 2.; //here 2 is OFFSET for zoom purposes
 			fr->ci = fr->y * fr->y_scale + 2.;
 			while (i < MAX_ITERS)
 			{
