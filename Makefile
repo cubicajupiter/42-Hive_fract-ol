@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME			= _______________
+NAME			= fractol
 
 SRCS			= _______________.c
 OBJS			= $(SRCS:%.c=%.o)
@@ -29,7 +29,7 @@ PRINTF_DIR		= printf
 ARCHIVES		= $(LIBFT_A) $(MLX_PATH) $(PRINTF_PATH)
 
 COMPILER		= cc
-CFLAGS			= -Wall -Wextra -Werror
+CFLAGS			= -Wall -Wextra -Werror -O3 -march=native
 INCLUDE_LIBFT		= -I $(LIBFT_PATH)
 INCLUDE_MLX		= -I $(MLX_PATH) -O3 -c $< -o $@
 

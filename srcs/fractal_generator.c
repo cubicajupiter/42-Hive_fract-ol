@@ -12,112 +12,101 @@
 
 #include "fractol.h"
 
-int		gen_fract_type(int argc, char *argv[], t_fract *fract)
+int		gen_fr(t_fract *restrict f, int re, double *restrict tmp_zR, int i)
 {
-	double		*save_zR;
-	int			i;
-
-	i = 0;
-	*save_zR = 0.0;
-	if (ft_strncmp(argv[1], "mandel", 7))
-		gen_mandel(fract, i, save_zR);
-	else if (ft_strncmp(argv[1], "julia", 6))
-	{
-		init_julia(fract, argc - 2, argv);
-		gen_julia(fract, i, save_zR);
-	}
-	else if (ft_strncmp(argv[1], "ship", 5))
-		gen_ship(fract, i, save_zR);
-	else
-	{
-		ft_putendl_fd("Choose type: mandel, julia, ship", 1);
-		return (ERROR);
-	}
-	return (0);
+	if (f->type == MANDEL)
+		gen_m(f, res, i, tmp_zR);
+	else if (f->type == JULIA)
+		gen_j(f, res, i, tmp_zR);
+	else if (f->type == SHIP)
+		gen_s(f, res, i, tmp_zR);
+	mlx_put_image_to_window(f->mlx, f->window, f->fract_img, 0, 0);
+	return (SUCCESS);
 }
 
 
-void	gen_mandel(t_fract *fr, int i, double *save_zR)
+static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 {
 	while (fr->y < W_HEIGHT)
 	{
 		fr->x = 0;
-		fr->ci = fr->y * fr->y_scale + fr->c_offset;
+		fr->ci = fr->y * fr->y_zoom;
 		while (fr->x < W_WIDTH)
 		{
 			fr->zR = 0.0;
 			fr->zi = 0.0;
-			fr->cR = fr->x * fr->x_scale - fr->c_offset;
-			while (i < MAX_ITRS_PER_RND)
+			fr->cR = fr->x * fr->x_zoom;
+			while (i < res)
 			{
-				*save_zR = fr->zR;
-				fr->zR = (fr->zR * fr->zR) + (-1 * fr->zi * fr->zi);
-				fr->zi = (*save_zR * fr->zi) * 2;
+				*tmp_zR = fr->zR;
+				fr->zR = (fr->zR * fr->zR) - (fr->zi * fr->zi);
+				fr->zi = 2 * (*tmp_zR * fr->zi) + fr->ci;
 				fr->zR += fr->cR;
-				fr->zi += fr->ci;
-				if ((fr->zR * fr->zR) + (fr->zi * fr->zi) > 4)
+				if ((fr->zR * fr->zR) + (fr->zi * fr->zi) > MAX_MAGNITUDE)
 					break ;
 				i++;
 			}
-			blit_px_to_img(fr, i); //prefer to replace with direct mlx call if possible in 25 lines
+			fr->pixel_ptr[fr->y * fr->l_len + fr->x * fr->bpp_to_px] = fr->colors[i];
 			i = 0;
 			fr->x++;
 		}
+		fr->y++;
 	}
 }
 
-void	gen_julia(t_fract *fr, int i, double *save_zR)
+static void	gen_j(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 {
 	while (fr->y < W_HEIGHT)
 	{
 		fr->x = 0;
-		fr->zi = fr->y * fr->y_scale + fr->c_offset;
+		fr->zi = fr->y * fr->y_zoom;
 		while (fr->x < W_WIDTH)
 		{
-			fr->zR = fr->x * fr->x_scale - fr->c_offset;
-			while (i < MAX_ITERS)
+			fr->zR = fr->x * fr->x_zoom;
+			while (i < res)
 			{
-				*save_zR = fr->zR;
-				fr->zR = (fr->zR * fr->zR) + (-1 * fr->zi * fr->zi);
-				fr->zi = (*save_zR * fr->zi) * 2;
+				*tmp_zR = fr->zR;
+				fr->zR = (fr->zR * fr->zR) - (fr->zi * fr->zi);
+				fr->zi = 2 * (*tmp_zR * fr->zi) + fr->ci;
 				fr->zR += fr->cR;
-				fr->zi += fr->ci;
-				if ((fr->zR * fr->zR) + (fr->zi * fr->zi) > 4)
+				if ((fr->zR * fr->zR) + (fr->zi * fr->zi) > MAX_MAGNITUDE)
 					break ;
 				i++;
 			}
-			blit_px_to_img(fr, i);
+			fr->pixel_ptr[fr->y * fr->l_len + fr->x * fr->bpp_to_px] = fr->colors[i];
 			i = 0;
 			fr->x++;
 		}
+		fr->y++;
 	}
 }
 
-void	gen_ship(t_fract *fr, int i, double *save_zR)
+static void	gen_s(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 {
 	while (fr->y < W_HEIGHT)
 	{
 		fr->x = 0;
+		fr->ci = fr->y * fr->y_zoom;
 		while (fr->x < W_WIDTH)
 		{
 			fr->zR = 0.0;
 			fr->zi = 0.0;
-			fr->cR = fr->x * fr->x_scale - fr->c_offest;
-			fr->ci = fr->y * fr->y_scale + fr->c_offset;
-			while (i < MAX_ITERS)
+			fr->cR = fr->x * fr->x_zoom;
+			while (i < res)
 			{
-				*save_zR = fr->zR;
+				*tmp_zR = fr->zR;
 				fr->zR = (fr->zR * fr->zR) - (fr->zi * fr->zi) - fr->cR;
-				fr->zi = (*save_zR * fr->zi);
+				fr->zi = (*tmp_zR * fr->zi);
 				fr->zi = fr->zi * (fr->zi > 0) - (fr->zi < 0);
 				fr->zi = 2 * fr->zi + fr->ci;
-				if ((fr->zR * fr->zR + (fr->zi * fr->zi) > 4))
+				if ((fr->zR * fr->zR + (fr->zi * fr->zi) > MAX_MAGNITUDE))
 					break ;
 				i++;
 			}
-			blit_px_to_img(fr, i);
+			fr->pixel_ptr[fr->y * fr->l_len + fr->x * fr->bpp_to_px] = fr->colors[i];
 			i = 0;
 			fr->x++;
 		}
+		fr->y++;
 	}
 }

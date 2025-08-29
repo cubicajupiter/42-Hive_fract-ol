@@ -17,37 +17,44 @@
 # include "libft/libft.h"
 # include <X11/X.h>
 
+# define MAX_MAGNITUDE	4
 # define ZOOM			1.3
 # define W_WIDTH		1000
 # define W_HEIGHT		1000
-# define MAX_ITERS		50
+# define MAX_ITERS		250
 # define ERROR			1
+# define SUCCESS		0
 # define INDEX			0
 # define SCROLL_UP		4
 # define SCROLL_DWN		5
 # define LEFT_CLICK		1
 # define RIGHT_CLICK	3
+# define REDCROSS		17
 
 typedef struct	s_fract {
-	void		*img;
-	char		*px_ptr;
-	int			x;
-	int			y;
-	double		zR;
-	double		zi;
-	double		cR;
-	double		ci;
-	double		x_scale;
-	double		y_scale;
-	double		magnitude;
-	double		offset;
-	int			colors[MAX_ITERS];
-	int			i;
-	int			bpp;
-	int			l_len;
-	int			e;
-	void		*mlx;
-	void		*window;
+	void			*img;
+	char			*px_ptr;
+	int				x;
+	int				y;
+	long double		zR;
+	long double		zi;
+	long double		cR;
+	long double		ci;
+	long double		x_scale;
+	long double		y_scale;
+	long double		magnitude;
+	long double		offset;
+	long double		y_zoom;
+	long double		x_zoom;
+	int				colors[MAX_ITERS];
+	int				i;
+	int				bpp;
+	int				bpp_to_px;
+	int				l_len;
+	int				e;
+	void			*mlx;
+	void			*window;
+	int				type;
 }	t_fract;
 
 //main.c
@@ -59,21 +66,22 @@ void	render(t_fract *fract);
 void	blit_px_to_img(t_fract *fract, int i);
 
 //fractal_generator.c
-int		gen_fract_type(int argc, char *argv[], t_fract *fract);
-void	gen_mandel(t_fract *fr, int i, double *save_zR);
-void	gen_julia(t_fract *fr, int i, double *save_zR);
-void	gen_ship(t_fract *fr, int i, double *save_zR);
+int		gen_fr(t_fract *restrict f, int re, double *restrict tmp_zR, int i);
+static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zR);
+static void	gen_j(t_fract *restrict fr, int re, int i, double *restrict tmp_zR);
+static void	gen_s(t_fract *restrict fr, int re, int i, double *restrict tmp_zR);
 
-//event_input.c
-int		close_window();
-int		handle_keypress();
-int		mouse_scroll();
+//event_hooks.c
+int		reso_iterator(void *fract);
+int		closebutton(void *fract);
+int		keys(int keysym, t_fract *fract);
+int		mousebutton(int button, int x, int y, void *param);
 
 //utils.c
 void	ft_atof(int argc, char **argv, float *parameters);
 void	get_decimal(char *string, float *result, int i, int divisor);
-void	zoom_in(t_fract *fract, int x, int y);
-void	zoom_out(t_fract *fract, int x, int y);
+void	zoom_in(t_fract *restrict fract, int x, int y);
+void	zoom_out(t_fract *restrict fract, int x, int y);
 
 //inits.c
 void	init_mlx(t_fract *fract);
