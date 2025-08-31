@@ -53,11 +53,13 @@ void	get_decimal(char *string, float *result, int i, int divisor)
 void	zoom_in(t_fract *restrict fract, int x, int y)
 {
 	fract->magnitude = fract->magnitude / ZOOM;
-	fract->c_offset = fract->magnitude / 2; //AND MOUSE POSITION?
+	fract->offset = fract->magnitude / 2; //AND MOUSE POSITION?
 	fract->x_scale = fract->magnitude / W_WIDTH;
 	fract->y_scale = fract->magnitude / W_HEIGHT * -1;
-	fract->y_zoom = fract->y_scale + fract->c_offset;
-	fract->x_zoom = fract->x_scale - fract->c_offset;
+	fract->y_zoom = fract->y_scale + fract->offset;
+	fract->x_zoom = fract->x_scale - fract->offset;
+	(void) x;
+	(void) y;
 }
 
 void	zoom_out(t_fract *restrict fract, int x, int y)
@@ -65,10 +67,12 @@ void	zoom_out(t_fract *restrict fract, int x, int y)
 	if (fract->magnitude < 4)
 	{
 		fract->magnitude = fract->magnitude * ZOOM;
-		fract->c_offset = fract->magnitude / 2; //AND MOUSE POSITION?
+		fract->offset = fract->magnitude / 2; //AND MOUSE POSITION?
 		fract->x_scale = fract->magnitude / W_WIDTH;
 		fract->y_scale = fract->magnitude / W_HEIGHT * -1;
-		fract->y_zoom = fract->y_scale + fract->c_offset;
-		fract->x_zoom = fract->x_scale - fract->c_offset;
+		fract->y_zoom = fract->y_scale + fract->offset;
+		fract->x_zoom = fract->x_scale - fract->offset;
+		(void) x;
+		(void) y;
 	}
 }

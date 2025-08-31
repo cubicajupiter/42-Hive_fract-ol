@@ -12,18 +12,21 @@
 
 #include "fractol.h"
 
+static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zR);
+static void	gen_j(t_fract *restrict fr, int re, int i, double *restrict tmp_zR);
+static void	gen_s(t_fract *restrict fr, int re, int i, double *restrict tmp_zR);
+
 int		gen_fr(t_fract *restrict f, int re, double *restrict tmp_zR, int i)
 {
 	if (f->type == MANDEL)
-		gen_m(f, res, i, tmp_zR);
+		gen_m(f, re, i, tmp_zR);
 	else if (f->type == JULIA)
-		gen_j(f, res, i, tmp_zR);
+		gen_j(f, re, i, tmp_zR);
 	else if (f->type == SHIP)
-		gen_s(f, res, i, tmp_zR);
-	mlx_put_image_to_window(f->mlx, f->window, f->fract_img, 0, 0);
+		gen_s(f, re, i, tmp_zR);
+	mlx_put_image_to_window(f->mlx_ptr, f->win_ptr, f->img, 0, 0);
 	return (SUCCESS);
 }
-
 
 static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 {
@@ -36,7 +39,7 @@ static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 			fr->zR = 0.0;
 			fr->zi = 0.0;
 			fr->cR = fr->x * fr->x_zoom;
-			while (i < res)
+			while (i < re)
 			{
 				*tmp_zR = fr->zR;
 				fr->zR = (fr->zR * fr->zR) - (fr->zi * fr->zi);
@@ -46,7 +49,7 @@ static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 					break ;
 				i++;
 			}
-			fr->pixel_ptr[fr->y * fr->l_len + fr->x * fr->bpp_to_px] = fr->colors[i];
+			fr->px_ptr[fr->y * fr->l_len + fr->x * fr->bpp_to_px] = fr->colors[i];
 			i = 0;
 			fr->x++;
 		}
@@ -63,7 +66,7 @@ static void	gen_j(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 		while (fr->x < W_WIDTH)
 		{
 			fr->zR = fr->x * fr->x_zoom;
-			while (i < res)
+			while (i < re)
 			{
 				*tmp_zR = fr->zR;
 				fr->zR = (fr->zR * fr->zR) - (fr->zi * fr->zi);
@@ -73,7 +76,7 @@ static void	gen_j(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 					break ;
 				i++;
 			}
-			fr->pixel_ptr[fr->y * fr->l_len + fr->x * fr->bpp_to_px] = fr->colors[i];
+			fr->px_ptr[fr->y * fr->l_len + fr->x * fr->bpp_to_px] = fr->colors[i];
 			i = 0;
 			fr->x++;
 		}
@@ -92,7 +95,7 @@ static void	gen_s(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 			fr->zR = 0.0;
 			fr->zi = 0.0;
 			fr->cR = fr->x * fr->x_zoom;
-			while (i < res)
+			while (i < re)
 			{
 				*tmp_zR = fr->zR;
 				fr->zR = (fr->zR * fr->zR) - (fr->zi * fr->zi) - fr->cR;
@@ -103,7 +106,7 @@ static void	gen_s(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 					break ;
 				i++;
 			}
-			fr->pixel_ptr[fr->y * fr->l_len + fr->x * fr->bpp_to_px] = fr->colors[i];
+			fr->px_ptr[fr->y * fr->l_len + fr->x * fr->bpp_to_px] = fr->colors[i];
 			i = 0;
 			fr->x++;
 		}

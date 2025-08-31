@@ -1,63 +1,72 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: jvalkama <jvalkama@student.hive.fi>        +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/05/08 12:19:53 by jvalkama          #+#    #+#              #
-#    Updated: 2025/05/13 15:29:53 by jvalkama         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+NAME		:= fractol
+SRCDIR		:= srcs
+SRCS		:=	$(SRCDIR)/event_hooks.c \
+				$(SRCDIR)/fractal_generator.c \
+				$(SRCDIR)/inits.c \
+				$(SRCDIR)/main.c \
+				$(SRCDIR)/renderer.c \
+				$(SRCDIR)/utils.c
+OBJS		:=	$(SRCDIR)/event_hooks.o \
+				$(SRCDIR)/fractal_generator.o \
+				$(SRCDIR)/inits.o \
+				$(SRCDIR)/main.o \
+				$(SRCDIR)/renderer.o \
+				$(SRCDIR)/utils.o
+INC_DIR		:= includes
+LIBFT_PATH	:= $(INC_DIR)/libft
+LIBFT_A		:= $(LIBFT_PATH)/libft.a
+MLX_PATH	:= $(INC_DIR)/mlx_linux
+MLX_A		:= $(MLX_PATH)/libmlx_Linux.a
+COMPILER	:= cc
+CFLAGS		:= -Wall -Wextra -Werror -O3 -march=native
+INCLUDES	:= -I. -I $(LIBFT_PATH) -I $(MLX_PATH) -I includes
+LIBS		:= -L $(LIBFT_PATH) -lft -L $(MLX_PATH) -lmlx_Linux -lXext -lX11 -lm
+RM			:= rm -f
 
-NAME			= fractol
+all:		$(NAME)
 
-SRCS			= _______________.c
-OBJS			= $(SRCS:%.c=%.o)
+$(LIBFT_PATH):
+			git clone https://github.com/cubicajupiter/42Hive-Libft.git $(LIBFT_PATH)
 
-HEADER			= _______________.h
+$(LIBFT_A):	| $(LIBFT_PATH)
+			@if [ ! -f $(LIBFT_A) ]; then \
+				echo "Building libft..."; \
+				make -C $(LIBFT_PATH); \
+			fi
 
-LIBFT_PATH		= $(LIBFT_DIR)/libft.a
-LIBFT_DIR		= libft
+$(MLX_PATH):
+			git clone https://github.com/42paris/minilibx-linux.git $(MLX_PATH)
 
-MLX_PATH		= $(MLX_DIR)/libmlx_Linux.a
-MLX_DIR			= ../../mlx_linux
+$(MLX_A):	| $(MLX_PATH)
+			@if [ ! -f $(MLX_A) ]; then \
+				echo "Building MLX..."; \
+				make -C $(MLX_PATH); \
+			fi
 
-PRINTF_PATH		= $(PRINTF_DIR)/libftprintf.a
-PRINTF_DIR		= printf
+$(NAME):	$(OBJS) $(MLX_A) $(LIBFT_A)
+			@echo "linking $@"
+			$(COMPILER) $(CFLAGS) $(OBJS) $(LIBS) -o $@
 
-ARCHIVES		= $(LIBFT_A) $(MLX_PATH) $(PRINTF_PATH)
-
-COMPILER		= cc
-CFLAGS			= -Wall -Wextra -Werror -O3 -march=native
-INCLUDE_LIBFT		= -I $(LIBFT_PATH)
-INCLUDE_MLX		= -I $(MLX_PATH) -O3 -c $< -o $@
-
-RM			= rm -f
-
-all:			$(NAME)
-
-$(LIBFT_A):
-				make -C $(LIBFT_PATH)
-
-$(NAME):		$(OBJS) $(ARCHIVES)
-				cp $(LIBFT_A) $(NAME)
-				ar -rcs $(NAME) $(OBJS)
-
-%.o:			%.c $(HEADER)
-				@echo "Compiling $<"
-				$(COMPILER) $(CFLAGS) $(INCLUDE_) -c $< -o $@
+%.o:		%.c | $(MLX_PATH) $(LIBFT_PATH)
+			@echo "Compiling $<"
+			$(COMPILER) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-				@echo "Cleaning object files in parent and libft"
-				@$(RM) $(OBJS)
-				make clean -C $(LIBFT_PATH)
+			@echo "Cleaning object files in parent and libft"
+			@$(RM) $(OBJS)
+			make clean -C $(LIBFT_PATH)
+			make clean -C $(MLX_PATH)
 
-fclean:			clean
-				@echo "Cleaning library in parent and libft"
-				@$(RM) $(NAME)
-				make fclean -C $(LIBFT_PATH)
+fclean:		clean
+			@echo "Cleaning library in parent and libft"
+			@$(RM) $(NAME)
+			make fclean -C $(LIBFT_PATH)
 
-re:				fclean all
+fclean-all:	fclean
+			@echo "Removing libft and mlx"
+			@$(RM) -rf $(LIBFT_PATH)
+			@$(RM) -rf $(MLX_PATH)
+
+re:			fclean all
 
 .PHONY: all clean fclean re

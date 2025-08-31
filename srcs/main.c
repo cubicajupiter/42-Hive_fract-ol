@@ -24,31 +24,31 @@ int		main(int argc, char *argv[])
 		ft_putendl_fd("(Bad parameters default to a Julia set at 0, 0)", 1);
 		return (ERROR);
 	}
-	if (initialize(&fract, argc, argv));
+	if (initialize(&fract, argc, argv))
 	{
-		free(*fract); //should actually free all the mlx bullshit also i think
+		free(fract); //should actually free all the mlx bullshit also i think
 		return (ERROR);
 	}
-	mlx_loop_hook(fract.mlx_ptr, &reso_iterator, &fract);
-	mlx_hook(fract.win_ptr, REDCROSS, 0, &closebutton, &fract);
-	mlx_hook(fract.win_ptr, KeyPress, KeyPressMask, &keys, &fract);
-	mlx_hook(fract.win_ptr, ButtonPress, ButtonPressMask, &mousebuttons, &fract);
-	mlx_loop(fract.mlx_ptr);
-	mlx_destroy_display(fract.mlx_ptr);
-	free(fract.mlx_ptr);
+	mlx_loop_hook(fract->mlx_ptr, &reso_iterator, fract);
+	mlx_hook(fract->win_ptr, REDCROSS, 0, &closebutton, fract);
+	mlx_hook(fract->win_ptr, KeyPress, KeyPressMask, &keys, fract);
+	mlx_hook(fract->win_ptr, ButtonPress, ButtonPressMask, &mousebuttons, fract);
+	mlx_loop(fract->mlx_ptr);
+	mlx_destroy_display(fract->mlx_ptr);
+	free(fract->mlx_ptr);
 	return (SUCCESS);
 }
 
 int	initialize(t_fract **fract, int argc, char **argv)
 {
-	*fract = malloc(sizeof(t_fract);
+	*fract = malloc(sizeof(t_fract));
 	if (!*fract)
 		return (ERROR);
-	if (init_mlx(fract))
+	if (init_mlx(*fract))
 		return (ERROR);
-	if (init_fract(fract, argc, argv))
+	if (init_fract(*fract, argc, argv))
 		return (ERROR);
-	init_colors(fract);
-	init_planar_values(fract);
+	init_colors(*fract);
+	init_planar_values(*fract);
 	return (SUCCESS);
 }

@@ -5,7 +5,7 @@ int	init_mlx(t_fract *fra)
 	fra->mlx_ptr = mlx_init();
 	if (!fra->mlx_ptr)
 		return (ERROR);
-	fra->win_ptr = mlx_new_window(fra->mlx_ptr), W_WIDTH, W_HEIGHT, "Fract-ol");
+	fra->win_ptr = mlx_new_window(fra->mlx_ptr, W_WIDTH, W_HEIGHT, "Fract-ol");
 	if (!fra->win_ptr)
 		return (ERROR);
 	return (SUCCESS);
@@ -35,7 +35,7 @@ int	init_fract(t_fract *f, int argc, char **argv)
 		return (ERROR);
 	}
 	return (SUCCESS);
-	f->bpp_to_px = fr->bpp / 8;
+	f->bpp_to_px = f->bpp / 8;
 }
 
 void	init_planar_values(t_fract *fract)
@@ -43,11 +43,11 @@ void	init_planar_values(t_fract *fract)
 	fract->x = 0;
 	fract->y = 0;
 	fract->magnitude = (long double) MAX_MAGNITUDE;
-	fract->c_offset = fract->magnitude / 2.;
+	fract->offset = fract->magnitude / 2.;
 	fract->x_scale = fract->magnitude / W_WIDTH;
 	fract->y_scale = fract->magnitude / W_HEIGHT * -1;
-	fract->y_zoom = fract->y_scale + fract->c_offset;
-	fract->x_zoom = fract->x_scale - fract->c_offset;
+	fract->y_zoom = fract->y_scale + fract->offset;
+	fract->x_zoom = fract->x_scale - fract->offset;
 }
 
 // colors are inputted as unsigned integers, 
@@ -60,8 +60,7 @@ void	init_colors(t_fract *fra)
 	int		gradient_offset;
 
 	i = 0;
-	color = 0xTTRRGGBB;
-	#012840
+	color = 0x00FF0000;
 	gradient_offset = 0;
 	while (i < MAX_ITERS)
 	{

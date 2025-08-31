@@ -1,19 +1,20 @@
 #include "fractol.h"
 
-int		reso_iterator(void *fract)
+int		reso_iterator(t_fract *fract)
 {
 	static int		current_reso; //this doesnt zero betwn zooms...
-	double			*save_zR;
+	double			tmp_zR;
 	int				i;
 
 	i = 0;
-	current_reso++;
-	*save_zR = 0.0;
-	gen_fr(&fract, current_reso, save_zR, i))
+	if (current_reso < MAX_ITERS)
+		current_reso++;
+	tmp_zR = 0.0;
+	gen_fr(fract, current_reso, &tmp_zR, i);
 	return (SUCCESS);
 }
 
-int		closebutton(void *fract)
+int		closebutton(t_fract *fract)
 {
 	mlx_destroy_window(fract->mlx_ptr, fract->win_ptr);
 	return (SUCCESS);
@@ -21,7 +22,7 @@ int		closebutton(void *fract)
 
 int		keys(int keysym, t_fract *fract)
 {
-	if (keysym = XK_Escape || keysym = 17)
+	if (keysym == KEY_ESCAPE || keysym == 17)
 		mlx_destroy_window(fract->mlx_ptr, fract->win_ptr);
 	return (SUCCESS);
 }
@@ -31,7 +32,7 @@ int		mousebuttons(int button, int x, int y, void *param)
 	t_fract		*fract;
 
 	fract = (t_fract *) param;
-	if (x < W_WIDTH && y < W_HEIGHT && x > 0 && Y > 0)
+	if (x < W_WIDTH && y < W_HEIGHT && x > 0 && y > 0)
 	{
 		if (button == SCROLL_UP || button == LEFT_CLICK)
 			zoom_in(fract, x, y);
