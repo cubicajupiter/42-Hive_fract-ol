@@ -1,11 +1,13 @@
 #include "fractol.h"
+#include <stdio.h>
 
-int		reso_iterator(t_fract *fract)
+int		reso_iterator(void *fract)
 {
 	static int		current_reso; //this doesnt zero betwn zooms...
 	double			tmp_zR;
 	int				i;
 
+	printf("Hook successfully called!\n");
 	i = 0;
 	if (current_reso < MAX_ITERS)
 		current_reso++;
@@ -16,14 +18,14 @@ int		reso_iterator(t_fract *fract)
 
 int		closebutton(t_fract *fract)
 {
-	mlx_destroy_window(fract->mlx_ptr, fract->win_ptr);
+	clean_program(fract);
 	return (SUCCESS);
 }
 
 int		keys(int keysym, t_fract *fract)
 {
 	if (keysym == KEY_ESCAPE || keysym == 17)
-		mlx_destroy_window(fract->mlx_ptr, fract->win_ptr);
+		clean_program(fract);
 	return (SUCCESS);
 }
 

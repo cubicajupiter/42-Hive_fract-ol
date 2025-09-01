@@ -1,4 +1,5 @@
 #include "fractol.h"
+#include <stdio.h>
 
 int	init_mlx(t_fract *fra)
 {
@@ -17,16 +18,17 @@ int	init_fract(t_fract *f, int argc, char **argv)
 	if (!f->img)
 		return (ERROR);
 	f->px_ptr = mlx_get_data_addr(f->img, &f->bpp, &f->l_len, &f->e);
+	f->px_int_ptr = (int *) f->px_ptr;
 	if (!f->px_ptr)
 		return (ERROR);
-	if (ft_strncmp(argv[1], "mandel", 7))
+	if (!ft_strncmp(argv[1], "mandel", 7))
 		f->type = MANDEL;
-	else if (ft_strncmp(argv[1], "julia", 6))
+	else if (!ft_strncmp(argv[1], "julia", 6))
 	{
 		init_julia(f, argc - 2, argv);
 		f->type = JULIA;
 	}
-	else if (ft_strncmp(argv[1], "ship", 5))
+	else if (!ft_strncmp(argv[1], "ship", 5))
 		f->type = SHIP;
 	else
 	{
@@ -35,7 +37,6 @@ int	init_fract(t_fract *f, int argc, char **argv)
 		return (ERROR);
 	}
 	return (SUCCESS);
-	f->bpp_to_px = f->bpp / 8;
 }
 
 void	init_planar_values(t_fract *fract)
@@ -45,7 +46,7 @@ void	init_planar_values(t_fract *fract)
 	fract->magnitude = (long double) MAX_MAGNITUDE;
 	fract->offset = fract->magnitude / 2.;
 	fract->x_scale = fract->magnitude / W_WIDTH;
-	fract->y_scale = fract->magnitude / W_HEIGHT * -1;
+	fract->y_scale = fract->magnitude / W_HEIGHT;
 	fract->y_zoom = fract->y_scale + fract->offset;
 	fract->x_zoom = fract->x_scale - fract->offset;
 }
@@ -60,12 +61,12 @@ void	init_colors(t_fract *fra)
 	int		gradient_offset;
 
 	i = 0;
-	color = 0x00FF0000;
-	gradient_offset = 0;
+	color = 0x50e96769;
+	gradient_offset = 1;
 	while (i < MAX_ITERS)
 	{
 		fra->colors[i] = color + gradient_offset;
-		gradient_offset += 0; //needs a good offset for gradient. Niklas: red loops up and down, green increase to full, blue increase to halfway.
+		gradient_offset += 666; //option: red loops up and down, green increase to full, blue increase to halfway.
 		i++;
 	}
 }

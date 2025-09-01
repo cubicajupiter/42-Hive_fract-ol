@@ -1,26 +1,37 @@
 NAME		:= fractol
+
 SRCDIR		:= srcs
+
 SRCS		:=	$(SRCDIR)/event_hooks.c \
 				$(SRCDIR)/fractal_generator.c \
 				$(SRCDIR)/inits.c \
 				$(SRCDIR)/main.c \
 				$(SRCDIR)/renderer.c \
 				$(SRCDIR)/utils.c
+
 OBJS		:=	$(SRCDIR)/event_hooks.o \
 				$(SRCDIR)/fractal_generator.o \
 				$(SRCDIR)/inits.o \
 				$(SRCDIR)/main.o \
 				$(SRCDIR)/renderer.o \
 				$(SRCDIR)/utils.o
+
 INC_DIR		:= includes
+
 LIBFT_PATH	:= $(INC_DIR)/libft
 LIBFT_A		:= $(LIBFT_PATH)/libft.a
+
 MLX_PATH	:= $(INC_DIR)/mlx_linux
 MLX_A		:= $(MLX_PATH)/libmlx_Linux.a
+
 COMPILER	:= cc
 CFLAGS		:= -Wall -Wextra -Werror -O3 -march=native
+
 INCLUDES	:= -I. -I $(LIBFT_PATH) -I $(MLX_PATH) -I includes
 LIBS		:= -L $(LIBFT_PATH) -lft -L $(MLX_PATH) -lmlx_Linux -lXext -lX11 -lm
+
+DEBUG		:= -g
+
 RM			:= rm -f
 
 all:		$(NAME)
@@ -49,7 +60,7 @@ $(NAME):	$(OBJS) $(MLX_A) $(LIBFT_A)
 
 %.o:		%.c | $(MLX_PATH) $(LIBFT_PATH)
 			@echo "Compiling $<"
-			$(COMPILER) $(CFLAGS) $(INCLUDES) -c $< -o $@
+			$(COMPILER) $(CFLAGS) $(INCLUDES) -c $< -o $@ $(DEBUG)
 
 clean:
 			@echo "Cleaning object files in parent and libft"
@@ -67,6 +78,6 @@ fclean-all:	fclean
 			@$(RM) -rf $(LIBFT_PATH)
 			@$(RM) -rf $(MLX_PATH)
 
-re:			fclean all
+re:			fclean fclean-all all
 
 .PHONY: all clean fclean re

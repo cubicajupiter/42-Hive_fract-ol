@@ -38,6 +38,7 @@
 typedef struct	s_fract {
 	void			*img;
 	char			*px_ptr;
+	int				*px_int_ptr;
 	int				x;
 	int				y;
 	long double		zR;
@@ -72,8 +73,9 @@ void	blit_px_to_img(t_fract *fract, int i);
 //fractal_generator.c
 int		gen_fr(t_fract *restrict f, int re, double *restrict tmp_zR, int i);
 
+
 //event_hooks.c
-int		reso_iterator(t_fract *fract);
+int		reso_iterator(void *fract);
 int		closebutton(t_fract *fract);
 int		keys(int keysym, t_fract *fract);
 int		mousebuttons(int button, int x, int y, void *param);
@@ -83,6 +85,7 @@ void	ft_atof(int argc, char **argv, float *parameters);
 void	get_decimal(char *string, float *result, int i, int divisor);
 void	zoom_in(t_fract *restrict fract, int x, int y);
 void	zoom_out(t_fract *restrict fract, int x, int y);
+void	clean_program(t_fract *fr);
 
 //inits.c
 int		init_mlx(t_fract *fra);

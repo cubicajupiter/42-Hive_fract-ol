@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "fractol.h"
+#include <stdio.h>
 
 static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zR);
 static void	gen_j(t_fract *restrict fr, int re, int i, double *restrict tmp_zR);
@@ -33,12 +34,12 @@ static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 	while (fr->y < W_HEIGHT)
 	{
 		fr->x = 0;
-		fr->ci = fr->y * fr->y_zoom;
+		fr->ci = -1 * (fr->y * fr->y_scale) + 2.;
 		while (fr->x < W_WIDTH)
 		{
 			fr->zR = 0.0;
 			fr->zi = 0.0;
-			fr->cR = fr->x * fr->x_zoom;
+			fr->cR = fr->x * fr->x_scale - 2.; //possible more efficient: just count the value of one increment, add that to cR and ignore value of x
 			while (i < re)
 			{
 				*tmp_zR = fr->zR;
@@ -49,7 +50,7 @@ static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 					break ;
 				i++;
 			}
-			fr->px_ptr[fr->y * fr->l_len + fr->x * fr->bpp_to_px] = fr->colors[i];
+			fr->px_int_ptr[(fr->y * fr->l_len / 4) + fr->x] = fr->colors[i];
 			i = 0;
 			fr->x++;
 		}

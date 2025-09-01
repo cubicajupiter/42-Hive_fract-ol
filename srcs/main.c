@@ -34,8 +34,6 @@ int		main(int argc, char *argv[])
 	mlx_hook(fract->win_ptr, KeyPress, KeyPressMask, &keys, fract);
 	mlx_hook(fract->win_ptr, ButtonPress, ButtonPressMask, &mousebuttons, fract);
 	mlx_loop(fract->mlx_ptr);
-	mlx_destroy_display(fract->mlx_ptr);
-	free(fract->mlx_ptr);
 	return (SUCCESS);
 }
 

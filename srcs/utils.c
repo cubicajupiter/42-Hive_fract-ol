@@ -76,3 +76,21 @@ void	zoom_out(t_fract *restrict fract, int x, int y)
 		(void) y;
 	}
 }
+
+void	clean_program(t_fract *fr)
+{
+	if (fr)
+	{
+		if (fr->img && fr->mlx_ptr)
+			mlx_destroy_image(fr->mlx_ptr, fr->img);
+		if (fr->win_ptr && fr->mlx_ptr)
+			mlx_destroy_window(fr->mlx_ptr, fr->win_ptr);
+		if (fr->mlx_ptr)
+		{
+			mlx_destroy_display(fr->mlx_ptr);
+			free(fr->mlx_ptr);
+		}
+		free(fr);
+	}
+	exit(SUCCESS);
+}
