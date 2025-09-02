@@ -1,3 +1,5 @@
+#Fractol
+
 ##Fractal Generation:
 
 ###generate_fractal:
