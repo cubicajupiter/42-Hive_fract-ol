@@ -25,27 +25,26 @@ int		gen_fr(t_fract *restrict f, int re, double *restrict tmp_zR, int i)
 		gen_j(f, re, i, tmp_zR);
 	else if (f->type == SHIP)
 		gen_s(f, re, i, tmp_zR);
-	mlx_put_image_to_window(f->mlx_ptr, f->win_ptr, f->img, 0, 0);
 	return (SUCCESS);
 }
 
 static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 {
+	fr->y = 0;
 	while (fr->y < W_HEIGHT)
 	{
 		fr->x = 0;
-		fr->ci = -1 * (fr->y * fr->y_scale) + 2.;
+		fr->ci = (long double) (W_HEIGHT - fr->y) / W_HEIGHT * (fr->c_max - fr->c_min) + fr->c_min;  //-1 * (fr->y * fr->y_scale) + fr->offset;
 		while (fr->x < W_WIDTH)
 		{
 			fr->zR = 0.0;
 			fr->zi = 0.0;
-			fr->cR = fr->x * fr->x_scale - 2.; //possible more efficient: just count the value of one increment, add that to cR and ignore value of x
+			fr->cR = (long double) fr->x / W_WIDTH * (fr->c_max - fr->c_min) + fr->c_min; // OLD: fr->x * fr->x_scale - fr->offset;
 			while (i < re)
 			{
-				*tmp_zR = fr->zR;
-				fr->zR = (fr->zR * fr->zR) - (fr->zi * fr->zi);
+				*tmp_zR = fr->zR; //CAST TMP_ZR TO LONG DOUBLE FOR MAX PRECISION!!!
+				fr->zR = (fr->zR * fr->zR) - (fr->zi * fr->zi) + fr->cR;
 				fr->zi = 2 * (*tmp_zR * fr->zi) + fr->ci;
-				fr->zR += fr->cR;
 				if ((fr->zR * fr->zR) + (fr->zi * fr->zi) > MAX_MAGNITUDE)
 					break ;
 				i++;
@@ -60,24 +59,24 @@ static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 
 static void	gen_j(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 {
+	fr->y = 0;
 	while (fr->y < W_HEIGHT)
 	{
 		fr->x = 0;
-		fr->zi = fr->y * fr->y_zoom;
+		fr->zi = (long double) (W_HEIGHT - fr->y) / W_HEIGHT * (fr->c_max - fr->c_min) + fr->c_min;  //-1 * (fr->y * fr->y_scale) + fr->offset;
 		while (fr->x < W_WIDTH)
 		{
-			fr->zR = fr->x * fr->x_zoom;
+			fr->zR = (long double) fr->x / W_WIDTH * (fr->c_max - fr->c_min) + fr->c_min;  //fr->x * fr->x_scale - fr->offset;
 			while (i < re)
 			{
 				*tmp_zR = fr->zR;
-				fr->zR = (fr->zR * fr->zR) - (fr->zi * fr->zi);
+				fr->zR = (fr->zR * fr->zR) - (fr->zi * fr->zi) + fr->cR;
 				fr->zi = 2 * (*tmp_zR * fr->zi) + fr->ci;
-				fr->zR += fr->cR;
 				if ((fr->zR * fr->zR) + (fr->zi * fr->zi) > MAX_MAGNITUDE)
 					break ;
 				i++;
 			}
-			fr->px_ptr[fr->y * fr->l_len + fr->x * fr->bpp_to_px] = fr->colors[i];
+			fr->px_int_ptr[(fr->y * fr->l_len / 4) + fr->x] = fr->colors[i];
 			i = 0;
 			fr->x++;
 		}
@@ -87,15 +86,16 @@ static void	gen_j(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 
 static void	gen_s(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 {
+	fr->y = 0;
 	while (fr->y < W_HEIGHT)
 	{
 		fr->x = 0;
-		fr->ci = fr->y * fr->y_zoom;
+		fr->ci = (long double) (W_HEIGHT - fr->y) / W_HEIGHT * (fr->c_max - fr->c_min) + fr->c_min;//-1 * (fr->y * fr->y_scale) + fr->offset;
 		while (fr->x < W_WIDTH)
 		{
 			fr->zR = 0.0;
 			fr->zi = 0.0;
-			fr->cR = fr->x * fr->x_zoom;
+			fr->cR = (long double) fr->x / W_WIDTH * (fr->c_max - fr->c_min) + fr->c_min;//fr->x * fr->x_scale - fr->offset;
 			while (i < re)
 			{
 				*tmp_zR = fr->zR;
@@ -107,7 +107,7 @@ static void	gen_s(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 					break ;
 				i++;
 			}
-			fr->px_ptr[fr->y * fr->l_len + fr->x * fr->bpp_to_px] = fr->colors[i];
+			fr->px_int_ptr[(fr->y * fr->l_len / 4) + fr->x] = fr->colors[i];
 			i = 0;
 			fr->x++;
 		}

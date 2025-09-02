@@ -2,18 +2,16 @@ NAME		:= fractol
 
 SRCDIR		:= srcs
 
-SRCS		:=	$(SRCDIR)/event_hooks.c \
+SRCS		:=	$(SRCDIR)/event_handler.c \
 				$(SRCDIR)/fractal_generator.c \
 				$(SRCDIR)/inits.c \
 				$(SRCDIR)/main.c \
-				$(SRCDIR)/renderer.c \
 				$(SRCDIR)/utils.c
 
-OBJS		:=	$(SRCDIR)/event_hooks.o \
+OBJS		:=	$(SRCDIR)/event_handler.o \
 				$(SRCDIR)/fractal_generator.o \
 				$(SRCDIR)/inits.o \
 				$(SRCDIR)/main.o \
-				$(SRCDIR)/renderer.o \
 				$(SRCDIR)/utils.o
 
 INC_DIR		:= includes

@@ -22,8 +22,8 @@
 # define SHIP			3
 # define MAX_MAGNITUDE	4
 # define ZOOM			1.3
-# define W_WIDTH		1000
-# define W_HEIGHT		1000
+# define W_WIDTH		2000
+# define W_HEIGHT		2000
 # define MAX_ITERS		250
 # define ERROR			1
 # define SUCCESS		0
@@ -45,16 +45,12 @@ typedef struct	s_fract {
 	long double		zi;
 	long double		cR;
 	long double		ci;
-	long double		x_scale;
-	long double		y_scale;
+	long double		c_max;
+	long double		c_min;
 	long double		magnitude;
-	long double		offset;
-	long double		y_zoom;
-	long double		x_zoom;
 	int				colors[MAX_ITERS];
 	int				i;
 	int				bpp;
-	int				bpp_to_px;
 	int				l_len;
 	int				e;
 	void			*mlx_ptr;
@@ -74,11 +70,12 @@ void	blit_px_to_img(t_fract *fract, int i);
 int		gen_fr(t_fract *restrict f, int re, double *restrict tmp_zR, int i);
 
 
-//event_hooks.c
-int		reso_iterator(void *fract);
+//event_handler.c
+int		reso_iterator(t_fract *fract);
 int		closebutton(t_fract *fract);
 int		keys(int keysym, t_fract *fract);
 int		mousebuttons(int button, int x, int y, void *param);
+void	draw_cursor(t_fract *f, int x, int y, int i);
 
 //utils.c
 void	ft_atof(int argc, char **argv, float *parameters);

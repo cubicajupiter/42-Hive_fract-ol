@@ -29,6 +29,7 @@ int		main(int argc, char *argv[])
 		free(fract); //should actually free all the mlx bullshit also i think
 		return (ERROR);
 	}
+	mlx_mouse_hide(fract->mlx_ptr, fract->win_ptr);
 	mlx_loop_hook(fract->mlx_ptr, &reso_iterator, fract);
 	mlx_hook(fract->win_ptr, REDCROSS, 0, &closebutton, fract);
 	mlx_hook(fract->win_ptr, KeyPress, KeyPressMask, &keys, fract);

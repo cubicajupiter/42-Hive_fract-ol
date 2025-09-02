@@ -41,14 +41,12 @@ int	init_fract(t_fract *f, int argc, char **argv)
 
 void	init_planar_values(t_fract *fract)
 {
-	fract->x = 0;
-	fract->y = 0;
-	fract->magnitude = (long double) MAX_MAGNITUDE;
-	fract->offset = fract->magnitude / 2.;
-	fract->x_scale = fract->magnitude / W_WIDTH;
-	fract->y_scale = fract->magnitude / W_HEIGHT;
-	fract->y_zoom = fract->y_scale + fract->offset;
-	fract->x_zoom = fract->x_scale - fract->offset;
+	//fract->magnitude = (long double) MAX_MAGNITUDE;
+	//fract->offset = fract->magnitude / 2.;
+	//fract->x_scale = fract->magnitude / W_WIDTH;
+	//fract->y_scale = fract->magnitude / W_HEIGHT;
+	fract->c_max = 2;
+	fract->c_min = -2;
 }
 
 // colors are inputted as unsigned integers, 

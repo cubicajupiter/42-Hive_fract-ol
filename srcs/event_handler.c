@@ -1,18 +1,21 @@
 #include "fractol.h"
 #include <stdio.h>
 
-int		reso_iterator(void *fract)
+int		reso_iterator(t_fract *fract)
 {
-	static int		current_reso; //this doesnt zero betwn zooms...
-	double			tmp_zR;
-	int				i;
+	int			current_reso;
+	double		tmp_zR;
+	int			i;
+	int			mouse_x;
+	int			mouse_y;
 
-	printf("Hook successfully called!\n");
 	i = 0;
-	if (current_reso < MAX_ITERS)
-		current_reso++;
 	tmp_zR = 0.0;
+	current_reso = 35;
 	gen_fr(fract, current_reso, &tmp_zR, i);
+	mlx_mouse_get_pos(fract->mlx_ptr, fract->win_ptr, &mouse_x, &mouse_y);
+	draw_cursor(fract, mouse_x, mouse_y, i);
+	mlx_put_image_to_window(fract->mlx_ptr, fract->win_ptr, fract->img, 0, 0);
 	return (SUCCESS);
 }
 
@@ -44,3 +47,17 @@ int		mousebuttons(int button, int x, int y, void *param)
 	return (SUCCESS);
 }
 
+void	draw_cursor(t_fract *f, int x, int y, int i)
+{
+	while (i < W_HEIGHT)
+	{
+		f->px_int_ptr[(i * f->l_len / 4) + x] = 0x00000000;
+		i++;
+	}
+	i = 0;
+	while (i < W_WIDTH)
+	{
+		f->px_int_ptr[(y * f->l_len / 4) + i] = 0x00000000;
+		i++;
+	}
+}
