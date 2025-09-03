@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "fractol.h"
-#include <stdio.h>
 
 static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zR);
 static void	gen_j(t_fract *restrict fr, int re, int i, double *restrict tmp_zR);
@@ -34,12 +33,12 @@ static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 	while (fr->y < W_HEIGHT)
 	{
 		fr->x = 0;
-		fr->ci = (long double) (W_HEIGHT - fr->y) / W_HEIGHT * (fr->c_max - fr->c_min) + fr->c_min;  //-1 * (fr->y * fr->y_scale) + fr->offset;
+		fr->ci = (W_HEIGHT - fr->y) / W_HEIGHT * fr->magn + fr->c_min;
 		while (fr->x < W_WIDTH)
 		{
 			fr->zR = 0.0;
 			fr->zi = 0.0;
-			fr->cR = (long double) fr->x / W_WIDTH * (fr->c_max - fr->c_min) + fr->c_min; // OLD: fr->x * fr->x_scale - fr->offset;
+			fr->cR = fr->x / W_WIDTH * fr->magn + fr->c_min;
 			while (i < re)
 			{
 				*tmp_zR = fr->zR; //CAST TMP_ZR TO LONG DOUBLE FOR MAX PRECISION!!!
@@ -63,10 +62,10 @@ static void	gen_j(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 	while (fr->y < W_HEIGHT)
 	{
 		fr->x = 0;
-		fr->zi = (long double) (W_HEIGHT - fr->y) / W_HEIGHT * (fr->c_max - fr->c_min) + fr->c_min;  //-1 * (fr->y * fr->y_scale) + fr->offset;
+		fr->zi = (long double) (W_HEIGHT - fr->y) / W_HEIGHT * fr->magn + fr->c_min;
 		while (fr->x < W_WIDTH)
 		{
-			fr->zR = (long double) fr->x / W_WIDTH * (fr->c_max - fr->c_min) + fr->c_min;  //fr->x * fr->x_scale - fr->offset;
+			fr->zR = (long double) fr->x / W_WIDTH * fr->magn + fr->c_min;
 			while (i < re)
 			{
 				*tmp_zR = fr->zR;
@@ -90,12 +89,12 @@ static void	gen_s(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
 	while (fr->y < W_HEIGHT)
 	{
 		fr->x = 0;
-		fr->ci = (long double) (W_HEIGHT - fr->y) / W_HEIGHT * (fr->c_max - fr->c_min) + fr->c_min;//-1 * (fr->y * fr->y_scale) + fr->offset;
+		fr->ci = (long double) (W_HEIGHT - fr->y) / W_HEIGHT * fr->magn + fr->c_min;
 		while (fr->x < W_WIDTH)
 		{
 			fr->zR = 0.0;
 			fr->zi = 0.0;
-			fr->cR = (long double) fr->x / W_WIDTH * (fr->c_max - fr->c_min) + fr->c_min;//fr->x * fr->x_scale - fr->offset;
+			fr->cR = (long double) fr->x / W_WIDTH * fr->magn + fr->c_min;
 			while (i < re)
 			{
 				*tmp_zR = fr->zR;

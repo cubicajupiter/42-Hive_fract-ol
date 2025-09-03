@@ -11,7 +11,7 @@ int		reso_iterator(t_fract *fract)
 
 	i = 0;
 	tmp_zR = 0.0;
-	current_reso = 35;
+	current_reso = ITERS;
 	gen_fr(fract, current_reso, &tmp_zR, i);
 	mlx_mouse_get_pos(fract->mlx_ptr, fract->win_ptr, &mouse_x, &mouse_y);
 	draw_cursor(fract, mouse_x, mouse_y, i);
@@ -49,15 +49,18 @@ int		mousebuttons(int button, int x, int y, void *param)
 
 void	draw_cursor(t_fract *f, int x, int y, int i)
 {
-	while (i < W_HEIGHT)
+	if (y > 0 && y < W_HEIGHT && x > 0 && x < W_WIDTH)
 	{
-		f->px_int_ptr[(i * f->l_len / 4) + x] = 0x00000000;
-		i++;
-	}
-	i = 0;
-	while (i < W_WIDTH)
-	{
-		f->px_int_ptr[(y * f->l_len / 4) + i] = 0x00000000;
-		i++;
+		while (i < W_HEIGHT)
+		{
+			f->px_int_ptr[(i * f->l_len / 4) + x] = 0x00000000;
+			i++;
+		}
+		i = 0;
+		while (i < W_WIDTH)
+		{
+			f->px_int_ptr[(y * f->l_len / 4) + i] = 0x00000000;
+			i++;
+		}
 	}
 }

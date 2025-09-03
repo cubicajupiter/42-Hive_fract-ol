@@ -20,7 +20,7 @@ int		main(int argc, char *argv[])
 	{
 		ft_putendl_fd("Run with argument:	./fractol <FRACTAL NAME> <julia param>", 1);
 		ft_putendl_fd("Fractal name arguments:	'mandel', 'julia', 'ship'\n", 1);
-		ft_putendl_fd("Julia takes two arguments:	<[-][0, 1, 2][.][decimals]>", 1);
+		ft_putendl_fd("Julia takes 2 args, X & Y like <[-][0, 1, 2][.][decis]>", 1);
 		ft_putendl_fd("(Bad parameters default to a Julia set at 0, 0)", 1);
 		return (ERROR);
 	}

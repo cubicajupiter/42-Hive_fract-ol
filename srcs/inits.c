@@ -1,5 +1,4 @@
 #include "fractol.h"
-#include <stdio.h>
 
 int	init_mlx(t_fract *fra)
 {
@@ -41,17 +40,11 @@ int	init_fract(t_fract *f, int argc, char **argv)
 
 void	init_planar_values(t_fract *fract)
 {
-	//fract->magnitude = (long double) MAX_MAGNITUDE;
-	//fract->offset = fract->magnitude / 2.;
-	//fract->x_scale = fract->magnitude / W_WIDTH;
-	//fract->y_scale = fract->magnitude / W_HEIGHT;
 	fract->c_max = 2;
-	fract->c_min = -2;
+	fract->c_min = -2.5;
+	fract->magn = fract->c_max - fract->c_min;
 }
 
-// colors are inputted as unsigned integers, 
-// either explicit HEX integers
-// or you have a function that shifts bits around in an int directly
 void	init_colors(t_fract *fra)
 {
 	int		i;

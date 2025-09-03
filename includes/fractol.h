@@ -21,10 +21,11 @@
 # define JULIA			2
 # define SHIP			3
 # define MAX_MAGNITUDE	4
-# define ZOOM			1.3
-# define W_WIDTH		2000
-# define W_HEIGHT		2000
+# define ZOOM			1.5L
+# define W_WIDTH		1500.0L
+# define W_HEIGHT		1500.0L
 # define MAX_ITERS		250
+# define ITERS			30
 # define ERROR			1
 # define SUCCESS		0
 # define INDEX			0
@@ -47,7 +48,7 @@ typedef struct	s_fract {
 	long double		ci;
 	long double		c_max;
 	long double		c_min;
-	long double		magnitude;
+	long double		magn;
 	int				colors[MAX_ITERS];
 	int				i;
 	int				bpp;
