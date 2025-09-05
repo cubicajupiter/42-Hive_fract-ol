@@ -14,20 +14,20 @@
 
 void		ft_atof(int argc, char **argv, float *parameters)
 {
-	char	**arg_ptr;
-	float	result;
-	int		sign;
+	char		**arg_ptr;
+	float		result;
+	int			sign;
 
-	sign = 1;
-	result = 0;
 	arg_ptr = argv + 2;
 	while (argc-- > 0)
 	{
+		sign = 1;
+		result = 0.0;
 		if (**arg_ptr == '-')
 		{
 			sign *= -1;
 			(*arg_ptr)++;
-		}	
+		}
 		if (**arg_ptr >= '0' && **arg_ptr <= '2')
 		{
 			result += **arg_ptr - '0';
@@ -35,7 +35,7 @@ void		ft_atof(int argc, char **argv, float *parameters)
 		}
 		if (**arg_ptr == '.')
 			get_decimal(*arg_ptr + 1, &result, 0, 10);
-		*parameters = result;
+		*parameters = result * sign;
 		parameters++;
 		arg_ptr++;
 	}
@@ -43,39 +43,41 @@ void		ft_atof(int argc, char **argv, float *parameters)
 
 void	get_decimal(char *string, float *result, int i, int divisor)
 {
-	if (i < 5)
+	if (string[i] && i < 5)
 	{
 		*result += (string[i] - '0') / (float) divisor;
 		get_decimal(string, result, i + 1, divisor * 10);
 	}
 }
 
-//	Stack overflow:
-//	x_val = (x_n / W_MAX) * (1 - (-2)) + (-2), where 1 is C_max and -2 is C_min
-//
-//	px_val = (px_n / W_MAX) * (C_MAX - C_MIN) + C_MIN)
-//	WITH ZOOM:
-//	W_MAX doesn't change.
-//	C_MAX and C_MIN depend on what part you zoom in and how much
-//
-void	zoom_in(t_fract *restrict fract, int x, int y)
+void	zoom_in(t_fract *restrict fr, int x, int y)
 {
-	fract->c_max = fract->c_max / ZOOM;
-	fract->c_min = fract->c_min / ZOOM;
-	fract->magn = fract->c_max - fract->c_min;
-	(void) x;
-	(void) y;
+	long double		mouse_i;
+	long double		mouse_R;
+
+	mouse_i = (long double) (W_HEIGHT - y) / W_HEIGHT * fr->magn + fr->y_min;
+	mouse_R = (long double) x / W_WIDTH * fr->magn + fr->x_min;
+	fr->magn = fr->magn / ZOOM;
+	fr->y_max = mouse_i + fr->magn / 2.0;
+	fr->y_min = mouse_i - fr->magn / 2.0;
+	fr->x_max = mouse_R + fr->magn / 2.0;
+	fr->x_min = mouse_R - fr->magn / 2.0;
 }
 
-void	zoom_out(t_fract *restrict fract, int x, int y)
+void	zoom_out(t_fract *restrict fr, int x, int y)
 {
-	if (fract->magn < 4)
+	long double		mouse_i;
+	long double		mouse_R;
+
+	if (fr->magn < 4)
 	{
-		fract->c_max = fract->c_max * ZOOM;
-		fract->c_min = fract->c_min * ZOOM;
-		fract->magn = fract->c_max - fract->c_min;
-		(void) x;
-		(void) y;
+		mouse_i = (long double) (W_HEIGHT - y) / W_HEIGHT * fr->magn + fr->y_min;
+		mouse_R = (long double) x / W_WIDTH * fr->magn + fr->x_min;
+		fr->magn = fr->magn * ZOOM;
+		fr->y_max = mouse_i + fr->magn / 2.0;
+		fr->y_min = mouse_i - fr->magn / 2.0;
+		fr->x_max = mouse_R + fr->magn / 2.0;
+		fr->x_min = mouse_R - fr->magn / 2.0;
 	}
 }
 

@@ -28,6 +28,8 @@ CFLAGS		:= -Wall -Wextra -Werror -O3 -march=native
 INCLUDES	:= -I. -I $(LIBFT_PATH) -I $(MLX_PATH) -I includes
 LIBS		:= -L $(LIBFT_PATH) -lft -L $(MLX_PATH) -lmlx_Linux -lXext -lX11 -lm
 
+HEADER		:= $(INC_DIR)/fractol.h
+
 DEBUG		:= -g
 
 RM			:= rm -f
@@ -56,7 +58,7 @@ $(NAME):	$(OBJS) $(MLX_A) $(LIBFT_A)
 			@echo "linking $@"
 			$(COMPILER) $(CFLAGS) $(OBJS) $(LIBS) -o $@
 
-%.o:		%.c | $(MLX_PATH) $(LIBFT_PATH)
+%.o:		%.c $(HEADER) | $(MLX_PATH) $(LIBFT_PATH)
 			@echo "Compiling $<"
 			$(COMPILER) $(CFLAGS) $(INCLUDES) -c $< -o $@ $(DEBUG)
 

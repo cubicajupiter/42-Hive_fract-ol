@@ -1,5 +1,4 @@
 #include "fractol.h"
-#include <stdio.h>
 
 int		reso_iterator(t_fract *fract)
 {
@@ -11,7 +10,7 @@ int		reso_iterator(t_fract *fract)
 
 	i = 0;
 	tmp_zR = 0.0;
-	current_reso = ITERS;
+	current_reso = MAX_ITERS / fract->magn;
 	gen_fr(fract, current_reso, &tmp_zR, i);
 	mlx_mouse_get_pos(fract->mlx_ptr, fract->win_ptr, &mouse_x, &mouse_y);
 	draw_cursor(fract, mouse_x, mouse_y, i);

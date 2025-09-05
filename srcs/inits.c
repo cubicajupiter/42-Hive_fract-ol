@@ -27,11 +27,9 @@ int	init_fract(t_fract *f, int argc, char **argv)
 		init_julia(f, argc - 2, argv);
 		f->type = JULIA;
 	}
-	else if (!ft_strncmp(argv[1], "ship", 5))
-		f->type = SHIP;
 	else
 	{
-		ft_putendl_fd("Choose type: mandel, julia, ship", 1);
+		ft_putendl_fd("Choose type:  mandel  / julia", 1);
 		free(f->mlx_ptr);
 		return (ERROR);
 	}
@@ -40,9 +38,11 @@ int	init_fract(t_fract *f, int argc, char **argv)
 
 void	init_planar_values(t_fract *fract)
 {
-	fract->c_max = 2;
-	fract->c_min = -2.5;
-	fract->magn = fract->c_max - fract->c_min;
+	fract->x_max = 2.;
+	fract->x_min = -2.5;
+	fract->y_max = 2.;
+	fract->y_min = -2.5;
+	fract->magn = fract->x_max - fract->x_min;
 }
 
 void	init_colors(t_fract *fra)
@@ -66,7 +66,9 @@ void	init_julia(t_fract *fra, int argc, char **argv)
 {
 	float	params[2];
 
-	ft_atof(argc, argv, params);
-	fra->cR = params[0];
-	fra->ci = params[1];
+	ft_atof(argc, argv, params); //does atof actually work?1
+	fra->zR = 0.0;
+	fra->zi = 0.0;
+	fra->cR = (long double) params[0];
+	fra->ci = (long double) params[1];
 }

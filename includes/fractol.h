@@ -19,13 +19,11 @@
 
 # define MANDEL			1
 # define JULIA			2
-# define SHIP			3
 # define MAX_MAGNITUDE	4
 # define ZOOM			1.5L
-# define W_WIDTH		1500.0L
-# define W_HEIGHT		1500.0L
-# define MAX_ITERS		250
-# define ITERS			30
+# define W_WIDTH		1500
+# define W_HEIGHT		1500
+# define MAX_ITERS		150
 # define ERROR			1
 # define SUCCESS		0
 # define INDEX			0
@@ -46,9 +44,11 @@ typedef struct	s_fract {
 	long double		zi;
 	long double		cR;
 	long double		ci;
-	long double		c_max;
-	long double		c_min;
-	long double		magn;
+	long double		y_max;
+	long double		y_min;
+	long double		x_max;
+	long double		x_min;
+	float			magn;
 	int				colors[MAX_ITERS];
 	int				i;
 	int				bpp;
@@ -69,7 +69,6 @@ void	blit_px_to_img(t_fract *fract, int i);
 
 //fractal_generator.c
 int		gen_fr(t_fract *restrict f, int re, double *restrict tmp_zR, int i);
-
 
 //event_handler.c
 int		reso_iterator(t_fract *fract);
