@@ -12,10 +12,10 @@
 
 #include "fractol.h"
 
-static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zR);
-static void	gen_j(t_fract *restrict fr, int re, int i, double *restrict tmp_zR);
+static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zr);
+static void	gen_j(t_fract *restrict fr, int re, int i, double *restrict tmp_zr);
 
-int		gen_fr(t_fract *restrict f, double *restrict tmp_zR, int i)
+int	gen_fr(t_fract *restrict f, double *restrict tmp_zr, int i)
 {
 	static int	reso = 3;
 	static int	zoom_lvl;
@@ -31,65 +31,65 @@ int		gen_fr(t_fract *restrict f, double *restrict tmp_zR, int i)
 	prev_col = f->colors[reso];
 	f->colors[reso] = 0x00000000;
 	if (f->type == MANDEL)
-		gen_m(f, reso, i, tmp_zR);
+		gen_m(f, reso, i, tmp_zr);
 	else if (f->type == JULIA)
-		gen_j(f, reso, i, tmp_zR);
+		gen_j(f, reso, i, tmp_zr);
 	f->colors[reso] = prev_col;
 	return (SUCCESS);
 }
 
-static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
+static void	gen_m(t_fract *restrict f, int re, int i, double *restrict tmp_zr)
 {
-	fr->y = 0;
-	while (fr->y < W_HEIGHT)
+	f->y = 0;
+	while (f->y < W_HEIGHT)
 	{
-		fr->x = 0;
-		fr->ci = (long double) (W_HEIGHT - fr->y) / W_HEIGHT * fr->magn + fr->y_min;
-		while (fr->x < W_WIDTH)
+		f->x = 0;
+		f->ci = (float)(W_HEIGHT - f->y) / W_HEIGHT * f->magn + f->y_min;
+		while (f->x < W_WIDTH)
 		{
-			fr->zR = 0.0;
-			fr->zi = 0.0;
-			fr->cR = (long double) fr->x / W_WIDTH * fr->magn + fr->x_min;
+			f->zr = 0.0;
+			f->zi = 0.0;
+			f->cr = (float) f->x / W_WIDTH * f->magn + f->x_min;
 			while (i < re)
 			{
-				*tmp_zR = fr->zR;
-				fr->zR = (fr->zR * fr->zR) - (fr->zi * fr->zi) + fr->cR;
-				fr->zi = 2 * (*tmp_zR * fr->zi) + fr->ci;
-				if ((fr->zR * fr->zR) + (fr->zi * fr->zi) > MAX_MAGNITUDE)
+				*tmp_zr = f->zr;
+				f->zr = (f->zr * f->zr) - (f->zi * f->zi) + f->cr;
+				f->zi = 2 * (*tmp_zr * f->zi) + f->ci;
+				if ((f->zr * f->zr) + (f->zi * f->zi) > MAX_MAGNITUDE)
 					break ;
 				i++;
 			}
-			fr->px_int_ptr[(fr->y * fr->l_len / 4) + fr->x] = fr->colors[i];
+			f->px_int_ptr[(f->y * f->int_step) + f->x] = f->colors[i];
 			i = 0;
-			fr->x++;
+			f->x++;
 		}
-		fr->y++;
+		f->y++;
 	}
 }
 
-static void	gen_j(t_fract *restrict fr, int re, int i, double *restrict tmp_zR)
+static void	gen_j(t_fract *restrict f, int re, int i, double *restrict tmp_zr)
 {
-	fr->y = 0;
-	while (fr->y < W_HEIGHT)
+	f->y = 0;
+	while (f->y < W_HEIGHT)
 	{
-		fr->x = 0;
-		while (fr->x < W_WIDTH)
+		f->x = 0;
+		while (f->x < W_WIDTH)
 		{
-			fr->zi = (long double) (W_HEIGHT - fr->y) / W_HEIGHT * fr->magn + fr->y_min;
-			fr->zR = (long double) fr->x / W_WIDTH * fr->magn + fr->x_min;
+			f->zi = (float)(W_HEIGHT - f->y) / W_HEIGHT * f->magn + f->y_min;
+			f->zr = (float) f->x / W_WIDTH * f->magn + f->x_min;
 			while (i < re)
 			{
-				*tmp_zR = fr->zR;
-				fr->zR = (fr->zR * fr->zR) - (fr->zi * fr->zi) + fr->cR;
-				fr->zi = 2 * (*tmp_zR * fr->zi) + fr->ci;
-				if ((fr->zR * fr->zR) + (fr->zi * fr->zi) > MAX_MAGNITUDE)
+				*tmp_zr = f->zr;
+				f->zr = (f->zr * f->zr) - (f->zi * f->zi) + f->cr;
+				f->zi = 2 * (*tmp_zr * f->zi) + f->ci;
+				if ((f->zr * f->zr) + (f->zi * f->zi) > MAX_MAGNITUDE)
 					break ;
 				i++;
 			}
-			fr->px_int_ptr[(fr->y * fr->l_len / 4) + fr->x] = fr->colors[i];
+			f->px_int_ptr[(f->y * f->int_step) + f->x] = f->colors[i];
 			i = 0;
-			fr->x++;
+			f->x++;
 		}
-		fr->y++;
+		f->y++;
 	}
 }

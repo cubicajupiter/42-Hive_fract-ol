@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   inits.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jvalkama <jvalkama@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/07 17:37:54 by jvalkama          #+#    #+#             */
+/*   Updated: 2025/09/07 17:44:28 by jvalkama         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fractol.h"
 
 int	init_mlx(t_fract *fra)
@@ -44,6 +56,7 @@ void	init_planar_values(t_fract *fract)
 	fract->y_min = -2.5;
 	fract->magn = fract->x_max - fract->x_min;
 	fract->zoom_lvl = 1;
+	fract->int_step = fract->l_len / 4;
 }
 
 void	init_colors(t_fract *fra)
@@ -67,9 +80,9 @@ void	init_julia(t_fract *fra, int argc, char **argv)
 {
 	float	params[2];
 
-	ft_atof(argc, argv, params); //does atof actually work?1
-	fra->zR = 0.0;
+	ft_atof(argc, argv, params);
+	fra->zr = 0.0;
 	fra->zi = 0.0;
-	fra->cR = (long double) params[0];
+	fra->cr = (long double) params[0];
 	fra->ci = (long double) params[1];
 }

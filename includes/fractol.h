@@ -13,9 +13,11 @@
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
+# include <stdlib.h>
 # include "mlx_linux/mlx.h"
 # include "libft/libft.h"
 # include <X11/X.h>
+# include <X11/keysym.h>
 
 # define MANDEL			1
 # define JULIA			2
@@ -32,17 +34,17 @@
 # define LEFT_CLICK		1
 # define RIGHT_CLICK	3
 # define REDCROSS		17
-# define KEY_ESCAPE		0xFF1B
 
-typedef struct	s_fract {
+typedef struct t_fract
+{
 	void			*img;
 	char			*px_ptr;
 	int				*px_int_ptr;
 	int				x;
 	int				y;
-	long double		zR;
+	long double		zr;
 	long double		zi;
-	long double		cR;
+	long double		cr;
 	long double		ci;
 	long double		y_max;
 	long double		y_min;
@@ -58,6 +60,7 @@ typedef struct	s_fract {
 	void			*win_ptr;
 	int				type;
 	int				zoom_lvl;
+	int				int_step;
 }	t_fract;
 
 //main.c
@@ -75,7 +78,7 @@ int		gen_fr(t_fract *restrict f, double *restrict tmp_zR, int i);
 int		reso_iterator(t_fract *fract);
 int		closebutton(t_fract *fract);
 int		keys(int keysym, t_fract *fract);
-int		mousebuttons(int button, int x, int y, void *param);
+int		m_btns(int button, int x, int y, void *param);
 void	draw_cursor(t_fract *f, int x, int y, int i);
 
 //utils.c

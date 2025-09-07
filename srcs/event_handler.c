@@ -1,35 +1,49 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   event_handler.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jvalkama <jvalkama@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/07 17:28:10 by jvalkama          #+#    #+#             */
+/*   Updated: 2025/09/07 17:37:45 by jvalkama         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fractol.h"
 
-int		reso_iterator(t_fract *fract)
+int	reso_iterator(t_fract *fract)
 {
-	double		tmp_zR;
+	double		tmp_zr;
 	int			i;
 	int			mouse_x;
 	int			mouse_y;
 
 	i = 0;
-	tmp_zR = 0.0;
-	gen_fr(fract, &tmp_zR, i);
+	tmp_zr = 0.0;
+	gen_fr(fract, &tmp_zr, i);
 	mlx_mouse_get_pos(fract->mlx_ptr, fract->win_ptr, &mouse_x, &mouse_y);
 	draw_cursor(fract, mouse_x, mouse_y, i);
 	mlx_put_image_to_window(fract->mlx_ptr, fract->win_ptr, fract->img, 0, 0);
 	return (SUCCESS);
 }
 
-int		closebutton(t_fract *fract)
+int	closebutton(t_fract *fract)
 {
 	clean_program(fract);
 	return (SUCCESS);
 }
 
-int		keys(int keysym, t_fract *fract)
+int	keys(int keysym, t_fract *fract)
 {
-	if (keysym == KEY_ESCAPE || keysym == 17)
+	if (keysym == XK_Escape)
 		clean_program(fract);
+	if (keysym == XK_r)
+		init_planar_values(fract);
 	return (SUCCESS);
 }
 
-int		mousebuttons(int button, int x, int y, void *param)
+int	m_btns(int button, int x, int y, void *param)
 {
 	t_fract		*fract;
 

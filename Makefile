@@ -69,15 +69,11 @@ clean:
 			make clean -C $(MLX_PATH)
 
 fclean:		clean
-			@echo "Cleaning library in parent and libft"
+			@echo "Cleaning all, including libft and mlx"
 			@$(RM) $(NAME)
-			make fclean -C $(LIBFT_PATH)
-
-fclean-all:	fclean
-			@echo "Removing libft and mlx"
 			@$(RM) -rf $(LIBFT_PATH)
 			@$(RM) -rf $(MLX_PATH)
 
-re:			fclean fclean-all all
+re:		fclean all
 
 .PHONY: all clean fclean re
