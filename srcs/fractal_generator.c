@@ -15,12 +15,26 @@
 static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zR);
 static void	gen_j(t_fract *restrict fr, int re, int i, double *restrict tmp_zR);
 
-int		gen_fr(t_fract *restrict f, int re, double *restrict tmp_zR, int i)
+int		gen_fr(t_fract *restrict f, double *restrict tmp_zR, int i)
 {
+	static int	reso = 3;
+	static int	zoom_lvl;
+	int			prev_col;
+
+	if (f->zoom_lvl != zoom_lvl)
+	{
+		zoom_lvl = f->zoom_lvl;
+		reso = 3 + zoom_lvl;
+	}
+	if (reso < MAX_ITERS)
+		reso++;
+	prev_col = f->colors[reso];
+	f->colors[reso] = 0x00000000;
 	if (f->type == MANDEL)
-		gen_m(f, re, i, tmp_zR);
+		gen_m(f, reso, i, tmp_zR);
 	else if (f->type == JULIA)
-		gen_j(f, re, i, tmp_zR);
+		gen_j(f, reso, i, tmp_zR);
+	f->colors[reso] = prev_col;
 	return (SUCCESS);
 }
 

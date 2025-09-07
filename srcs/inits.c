@@ -43,6 +43,7 @@ void	init_planar_values(t_fract *fract)
 	fract->y_max = 2.;
 	fract->y_min = -2.5;
 	fract->magn = fract->x_max - fract->x_min;
+	fract->zoom_lvl = 1;
 }
 
 void	init_colors(t_fract *fra)
@@ -57,7 +58,7 @@ void	init_colors(t_fract *fra)
 	while (i < MAX_ITERS)
 	{
 		fra->colors[i] = color + gradient_offset;
-		gradient_offset += 666; //option: red loops up and down, green increase to full, blue increase to halfway.
+		gradient_offset += 567;
 		i++;
 	}
 }

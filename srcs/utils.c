@@ -62,6 +62,7 @@ void	zoom_in(t_fract *restrict fr, int x, int y)
 	fr->y_min = mouse_i - fr->magn / 2.0;
 	fr->x_max = mouse_R + fr->magn / 2.0;
 	fr->x_min = mouse_R - fr->magn / 2.0;
+	fr->zoom_lvl++;
 }
 
 void	zoom_out(t_fract *restrict fr, int x, int y)
@@ -69,7 +70,7 @@ void	zoom_out(t_fract *restrict fr, int x, int y)
 	long double		mouse_i;
 	long double		mouse_R;
 
-	if (fr->magn < 4)
+	if (fr->zoom_lvl > 1)
 	{
 		mouse_i = (long double) (W_HEIGHT - y) / W_HEIGHT * fr->magn + fr->y_min;
 		mouse_R = (long double) x / W_WIDTH * fr->magn + fr->x_min;
@@ -78,6 +79,7 @@ void	zoom_out(t_fract *restrict fr, int x, int y)
 		fr->y_min = mouse_i - fr->magn / 2.0;
 		fr->x_max = mouse_R + fr->magn / 2.0;
 		fr->x_min = mouse_R - fr->magn / 2.0;
+		fr->zoom_lvl--;
 	}
 }
 

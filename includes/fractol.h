@@ -23,7 +23,7 @@
 # define ZOOM			1.5L
 # define W_WIDTH		1500
 # define W_HEIGHT		1500
-# define MAX_ITERS		150
+# define MAX_ITERS		250
 # define ERROR			1
 # define SUCCESS		0
 # define INDEX			0
@@ -57,6 +57,7 @@ typedef struct	s_fract {
 	void			*mlx_ptr;
 	void			*win_ptr;
 	int				type;
+	int				zoom_lvl;
 }	t_fract;
 
 //main.c
@@ -68,7 +69,7 @@ void	render(t_fract *fract);
 void	blit_px_to_img(t_fract *fract, int i);
 
 //fractal_generator.c
-int		gen_fr(t_fract *restrict f, int re, double *restrict tmp_zR, int i);
+int		gen_fr(t_fract *restrict f, double *restrict tmp_zR, int i);
 
 //event_handler.c
 int		reso_iterator(t_fract *fract);
