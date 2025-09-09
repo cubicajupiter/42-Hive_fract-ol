@@ -6,7 +6,7 @@
 /*   By: jvalkama <jvalkama@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/07 17:28:10 by jvalkama          #+#    #+#             */
-/*   Updated: 2025/09/07 17:37:45 by jvalkama         ###   ########.fr       */
+/*   Updated: 2025/09/09 12:22:12 by jvalkama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	reso_iterator(t_fract *fract)
 {
-	double		tmp_zr;
-	int			i;
-	int			mouse_x;
-	int			mouse_y;
+	long double		tmp_zr;
+	int				i;
+	int				mouse_x;
+	int				mouse_y;
 
 	i = 0;
 	tmp_zr = 0.0;

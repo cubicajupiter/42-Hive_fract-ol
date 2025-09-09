@@ -12,10 +12,10 @@
 
 #include "fractol.h"
 
-static void	gen_m(t_fract *restrict fr, int re, int i, double *restrict tmp_zr);
-static void	gen_j(t_fract *restrict fr, int re, int i, double *restrict tmp_zr);
+static void	gen_m(t_fract *restrict fr, int re, int i, long double *tmp_zr);
+static void	gen_j(t_fract *restrict fr, int re, int i, long double *tmp_zr);
 
-int	gen_fr(t_fract *restrict f, double *restrict tmp_zr, int i)
+int	gen_fr(t_fract *f, long double *tmp_zr, int i)
 {
 	static int	reso = 3;
 	static int	zoom_lvl;
@@ -38,7 +38,7 @@ int	gen_fr(t_fract *restrict f, double *restrict tmp_zr, int i)
 	return (SUCCESS);
 }
 
-static void	gen_m(t_fract *restrict f, int re, int i, double *restrict tmp_zr)
+static void	gen_m(t_fract *restrict f, int re, int i, long double *tmp_zr)
 {
 	f->y = 0;
 	while (f->y < W_HEIGHT)
@@ -67,7 +67,7 @@ static void	gen_m(t_fract *restrict f, int re, int i, double *restrict tmp_zr)
 	}
 }
 
-static void	gen_j(t_fract *restrict f, int re, int i, double *restrict tmp_zr)
+static void	gen_j(t_fract *restrict f, int re, int i, long double *tmp_zr)
 {
 	f->y = 0;
 	while (f->y < W_HEIGHT)

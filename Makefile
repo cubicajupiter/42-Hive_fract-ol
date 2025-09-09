@@ -1,18 +1,16 @@
 NAME		:= fractol
 
 SRCDIR		:= srcs
+VPATH		:= $(SRCDIR)
+SRCS		:=	event_handler.c \
+				fractal_generator.c \
+				initiator.c \
+				zoomer.c \
+				main.c \
+				parser.c
 
-SRCS		:=	$(SRCDIR)/event_handler.c \
-				$(SRCDIR)/fractal_generator.c \
-				$(SRCDIR)/inits.c \
-				$(SRCDIR)/main.c \
-				$(SRCDIR)/utils.c
-
-OBJS		:=	$(SRCDIR)/event_handler.o \
-				$(SRCDIR)/fractal_generator.o \
-				$(SRCDIR)/inits.o \
-				$(SRCDIR)/main.o \
-				$(SRCDIR)/utils.o
+OBJDIR		:= objs
+OBJS		:= $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 
 INC_DIR		:= includes
 
@@ -37,43 +35,47 @@ RM			:= rm -f
 all:		$(NAME)
 
 $(LIBFT_PATH):
-			git clone https://github.com/cubicajupiter/42Hive-Libft.git $(LIBFT_PATH)
+						git clone https://github.com/cubicajupiter/42Hive-Libft.git $(LIBFT_PATH)
 
-$(LIBFT_A):	| $(LIBFT_PATH)
-			@if [ ! -f $(LIBFT_A) ]; then \
-				echo "Building libft..."; \
-				make -C $(LIBFT_PATH); \
-			fi
+$(LIBFT_A):			| $(LIBFT_PATH)
+						@if [ ! -f $(LIBFT_A) ]; then \
+							echo "Building libft..."; \
+							make -C $(LIBFT_PATH); \
+						fi
 
 $(MLX_PATH):
-			git clone https://github.com/42paris/minilibx-linux.git $(MLX_PATH)
+						git clone https://github.com/42paris/minilibx-linux.git $(MLX_PATH)
 
-$(MLX_A):	| $(MLX_PATH)
-			@if [ ! -f $(MLX_A) ]; then \
-				echo "Building MLX..."; \
-				make -C $(MLX_PATH); \
-			fi
+$(MLX_A):			| $(MLX_PATH)
+						@if [ ! -f $(MLX_A) ]; then \
+							echo "Building MLX..."; \
+							make -C $(MLX_PATH); \
+						fi
 
-$(NAME):	$(OBJS) $(MLX_A) $(LIBFT_A)
-			@echo "linking $@"
-			$(COMPILER) $(CFLAGS) $(OBJS) $(LIBS) -o $@
+$(OBJDIR):
+						mkdir -p $(OBJDIR)
 
-%.o:		%.c $(HEADER) | $(MLX_PATH) $(LIBFT_PATH)
-			@echo "Compiling $<"
-			$(COMPILER) $(CFLAGS) $(INCLUDES) -c $< -o $@ $(DEBUG)
+$(NAME):			$(OBJS) $(MLX_A) $(LIBFT_A)
+						@echo "linking $@"
+						$(COMPILER) $(CFLAGS) $(OBJS) $(LIBS) -o $@
+
+$(OBJDIR)/%.o:		$(SRCDIR)/%.c $(HEADER) | $(OBJDIR) $(MLX_PATH) $(LIBFT_PATH)
+						@echo "Compiling $<"
+						$(COMPILER) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-			@echo "Cleaning object files in parent and libft"
-			@$(RM) $(OBJS)
-			make clean -C $(LIBFT_PATH)
-			make clean -C $(MLX_PATH)
+						@echo "Cleaning object files in parent and libft"
+						@$(RM) $(OBJS)
+						make clean -C $(LIBFT_PATH)
+						make clean -C $(MLX_PATH)
 
-fclean:		clean
-			@echo "Cleaning all, including libft and mlx"
-			@$(RM) $(NAME)
-			@$(RM) -rf $(LIBFT_PATH)
-			@$(RM) -rf $(MLX_PATH)
+fclean:				clean
+						@echo "Cleaning all, including libft and mlx"
+						@$(RM) $(NAME)
+						@$(RM) -rf $(OBJDIR)
+						@$(RM) -rf $(LIBFT_PATH)
+						@$(RM) -rf $(MLX_PATH)
 
-re:		fclean all
+re:					fclean all
 
 .PHONY: all clean fclean re

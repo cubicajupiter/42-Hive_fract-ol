@@ -22,7 +22,7 @@
 # define MANDEL			1
 # define JULIA			2
 # define MAX_MAGNITUDE	4
-# define ZOOM			1.5L
+# define ZOOM			1.4L
 # define W_WIDTH		1500
 # define W_HEIGHT		1500
 # define MAX_ITERS		250
@@ -50,7 +50,7 @@ typedef struct t_fract
 	long double		y_min;
 	long double		x_max;
 	long double		x_min;
-	float			magn;
+	long double		magn;
 	int				colors[MAX_ITERS];
 	int				i;
 	int				bpp;
@@ -66,13 +66,10 @@ typedef struct t_fract
 //main.c
 int		main(int argc, char *argv[]);
 int		initialize(t_fract **fract, int argc, char **argv);
-
-//renderer.c
-void	render(t_fract *fract);
-void	blit_px_to_img(t_fract *fract, int i);
+void	clean_program(t_fract *fr);
 
 //fractal_generator.c
-int		gen_fr(t_fract *restrict f, double *restrict tmp_zR, int i);
+int		gen_fr(t_fract *f, long double *tmp_zR, int i);
 
 //event_handler.c
 int		reso_iterator(t_fract *fract);
@@ -81,18 +78,21 @@ int		keys(int keysym, t_fract *fract);
 int		m_btns(int button, int x, int y, void *param);
 void	draw_cursor(t_fract *f, int x, int y, int i);
 
-//utils.c
-void	ft_atof(int argc, char **argv, float *parameters);
-void	get_decimal(char *string, float *result, int i, int divisor);
+//zoomer.c
 void	zoom_in(t_fract *restrict fract, int x, int y);
 void	zoom_out(t_fract *restrict fract, int x, int y);
-void	clean_program(t_fract *fr);
 
-//inits.c
-int		init_mlx(t_fract *fra);
-int		init_fract(t_fract *f, int argc, char **argv);
-void	init_planar_values(t_fract *fract);
-void	init_colors(t_fract *fract);
-void	init_julia(t_fract *fract, int argc, char **argv);
+//initiator.c
+int		init_mlx(t_fract *f);
+int		init_fract(t_fract *f, int ac, char **av);
+void	init_planar_values(t_fract *f);
+void	init_colors(t_fract *f);
+void	init_julia(t_fract *f, int ac, char **av);
+
+//parser.c
+void	ft_atof(int argc, char **argv, float *parameters);
+void	get_decimal(char *string, float *result, int i, int divisor);
+int		pre_check_args(char **av);
+int		check_argument(char *arg);
 
 #endif

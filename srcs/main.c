@@ -6,29 +6,25 @@
 /*   By: jvalkama <jvalkama@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 14:12:31 by jvalkama          #+#    #+#             */
-/*   Updated: 2025/09/07 17:37:58 by jvalkama         ###   ########.fr       */
+/*   Updated: 2025/09/07 17:52:20 by jvalkama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-int	main(int argc, char *argv[])
+int	main(int ac, char *av[])
 {
 	t_fract		*fract;
 
-	if (argc < 2 || argc > 4)
+	if (ac < 2 || ac > 4)
 	{
-		ft_putendl_fd("Run with argument:	./fractol <name> <julia param>", 1);
-		ft_putendl_fd("Choose fract:	'mandel' / 'julia'\n", 1);
-		ft_putendl_fd("Julia takes 2 args: <[-][0, 1, 2][.][decis]>", 1);
-		ft_putendl_fd("(Bad parameters default to a Julia set at 0, 0)", 1);
+		ft_putendl_fd("Usage: ./fractol <NAME> <2 PARAMS IF JULIA>", 1);
+		ft_putendl_fd("NAME:  'mandel' 'julia'\n", 1);
+		ft_putendl_fd("JULIA PARAM: <[-][0, 1, 2].[0 - 9]>", 1);
 		return (ERROR);
 	}
-	if (initialize(&fract, argc, argv))
-	{
+	if (initialize(&fract, ac, av))
 		clean_program(fract);
-		return (ERROR);
-	}
 	mlx_mouse_hide(fract->mlx_ptr, fract->win_ptr);
 	mlx_loop_hook(fract->mlx_ptr, &reso_iterator, fract);
 	mlx_hook(fract->win_ptr, REDCROSS, 0, &closebutton, fract);
@@ -50,4 +46,26 @@ int	initialize(t_fract **fract, int argc, char **argv)
 	init_colors(*fract);
 	init_planar_values(*fract);
 	return (SUCCESS);
+}
+
+void	clean_program(t_fract *fract)
+{
+	ft_putendl_fd("[ USAGE ]\nNAME: 'mandel' / 'julia'", 1);
+	ft_putendl_fd("JULIA PARAMS: <[-][0, 1, 2].[0 - 9]>", 1);
+	ft_putendl_fd("Mandel takes no parameters!\nJulia takes two FLOATS!", 1);
+	if (fract)
+	{
+		if (fract->img && fract->mlx_ptr)
+			mlx_destroy_image(fract->mlx_ptr, fract->img);
+		if (fract->win_ptr && fract->mlx_ptr)
+			mlx_destroy_window(fract->mlx_ptr, fract->win_ptr);
+		if (fract->mlx_ptr)
+		{
+			mlx_loop_end(fract->mlx_ptr);
+			mlx_destroy_display(fract->mlx_ptr);
+			free(fract->mlx_ptr);
+		}
+		free(fract);
+	}
+	exit(SUCCESS);
 }
